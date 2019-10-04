@@ -5,7 +5,7 @@
  * @prop {Array<Array<string>>} arr - contains the status of each position on the game board.
  * @prop {boolean} isHit - used when checking whether a cell has been hit during gameplay.
  */
-class Grid{   
+class Grid{
     arr;
     conf;
     isHit;
@@ -29,7 +29,7 @@ class Grid{
     populateGrid(locationArr, tableId){
         for(let i = 0; i < locationArr.length; i++){
             this.arr[(locationArr[i].substring(0, locationArr[i].indexOf(":"))) - 1]
-                [(locationArr[i].substring(locationArr[i].indexOf(":") + 1)) - 1] 
+                [(locationArr[i].substring(locationArr[i].indexOf(":") + 1)) - 1]
                 = this.conf.oceanTypes.SHIP;
         }
         this.refreshTable(tableId, true);
@@ -87,6 +87,21 @@ class Grid{
             this.arr[i][j] = this.conf.oceanTypes.MISS;
         }
         this.refreshTable(tableId, false);
+        return this.isHit;
+    }
+
+    /**
+     * Changes a single cell based on whether or not the shot was a hit or a miss.
+     * @param {string} AIlocation - The coordinate location of the cell to update.
+     * @param {string} AItableId - The identifier for the table to be changed.
+     * @return {boolean} true if a ship was hit; false if it was a miss.
+     */
+    AIupdateCell(AIlocation, AItableId){
+        this.isHit = false;
+        let i = location.substring(0, location.indexOf(":")) - 1;
+        let j = location.substring(location.indexOf(":") + 1) - 1;
+        if(this.arr[i][j] == this.conf.oceanTypes.SHIP)
+            this.isHit = true;
         return this.isHit;
     }
 }

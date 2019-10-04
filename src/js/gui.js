@@ -22,11 +22,11 @@ function removeInstructions()
 function setPlayerNames() {
     p1 = document.getElementById("player1").value;
     p2 = document.getElementById("player2").value;
-  if (!(document.getElementById("player1") && document.getElementById("player1").value)) 
+  if (!(document.getElementById("player1") && document.getElementById("player1").value))
   {
     p1 = document.getElementById("player1").placeholder;
   }
-  if (!(document.getElementById("player2") && document.getElementById("player2").value)) 
+  if (!(document.getElementById("player2") && document.getElementById("player2").value))
   {
     p2 = document.getElementById("player2").placeholder;
   }
@@ -47,7 +47,7 @@ function setShipCount(shipId) {
   //validate that number of ships is between 1 and 5/
   //prompt until you recieve a valid input
 
-    while ( numShips > 5 ||numShips < 1 || numShips === null ||numShips % 1 != 0) 
+    while ( numShips > 5 ||numShips < 1 || numShips === null ||numShips % 1 != 0)
     {
     //check numShips%1!=0 because we only want an integer. integer%1 is always 0.
       numShips = prompt("Please enter number of ships between 1 and 5: ");
@@ -56,7 +56,7 @@ function setShipCount(shipId) {
   }
   else
   {
-    //if now player2, don't ask for number of ships since it was already determined 
+    //if now player2, don't ask for number of ships since it was already determined
     numShips = document.getElementById("shipNum").innerHTML;
   }
 
@@ -65,47 +65,49 @@ function setShipCount(shipId) {
   document.getElementById("button1").disabled = true;
   document.getElementById("player1").disabled = true;
   document.getElementById("player2").disabled = true;
+  document.getElementById("AI_difficulty").disabled = true;
+  document.getElementById("AI_selector").disabled = true;
 
   document.getElementById("ships").innerHTML =
     "You have chosen " + numShips + " ships";
 
   //prompt for the orientation of the ship and check for valid input
  let direction = prompt("Now please choose an orientation for this ship. Type 1 for horizontal or 2 for vertical");
-  while (direction < 1 ||direction > 2 || direction % 1 != 0 ||direction === null) 
+  while (direction < 1 ||direction > 2 || direction % 1 != 0 ||direction === null)
   {
     direction = prompt("Type 1 for horizontal or 2 for vertical");
   }
   //change/confirm the intput is a number
   direction = parseInt(direction, 10);
   direction = Number(direction);
-  if (direction === 1) 
+  if (direction === 1)
   {
     //if it is horizontal
     placeShip(numShips, true, shipId);
-  } 
-  else 
+  }
+  else
   {
-    //if it is vertical 
+    //if it is vertical
     placeShip(numShips, false, shipId);
   }
 }
 
 /**
  * [Member of gui.js]
- * This function deals with the interface for placing ships. When the mouse hovers, 
+ * This function deals with the interface for placing ships. When the mouse hovers,
  * the cells that would be occupied by the ship change color depending on if a ship can be placed there.
  * Lets p1 place all their ships before hiding the map and prompting p2 to place their ships.
  * @param {int} size - the size of the ship being placed.
  * @param {boolean} horizontal - the orientation of the ship: true if the ship is horizontal, false if vertical.
  * @param {string} shipId - the html id for the ship map being used.
  */
-function placeShip(size, horizontal, shipId) 
+function placeShip(size, horizontal, shipId)
 {
   //recursive exit check
   if (size <= 0)
   {
     return 0;
-  }  
+  }
   //display the text and tables relevant to the player
   document.getElementById("ships").style.display = "block";
   document.getElementById("placement").style.display = "block";
@@ -121,11 +123,11 @@ function placeShip(size, horizontal, shipId)
   let table = document.getElementById(shipId);
 
   //if the table isn't empty, begin to show the user places they can place their ships
-  if (table != null) 
+  if (table != null)
   {
-    for (let i = 0; i < table.rows.length; i++) 
+    for (let i = 0; i < table.rows.length; i++)
     {
-      for (let j = 0; j < table.rows[i].cells.length; j++) 
+      for (let j = 0; j < table.rows[i].cells.length; j++)
       {
         table.rows[i].cells[j].style.cursor = "ptr";
 
@@ -133,25 +135,25 @@ function placeShip(size, horizontal, shipId)
         table.rows[i].cells[j].onmousemove = changeColor(size, horizontal, "yellow", shipId);
 
         //removes the red and yellow when you move the mouse to point somewhere else
-        table.rows[i].cells[j].onmouseout = function() 
+        table.rows[i].cells[j].onmouseout = function()
         {
           if (horizontal)
           {
             if (j + size <= 8)  //if the potential ship did not go out of bounds
             {
-              for (let count = 0; count < size; count++) 
+              for (let count = 0; count < size; count++)
               {
                 if (table.rows[i].cells[j + count].innerHTML != "") //if there is no ship already there
                   table.rows[i].cells[j + count].style.backgroundColor = "lightblue"; //turn it back to water
                 else
-                  table.rows[i].cells[j + count].style.backgroundColor = "grey"; 
+                  table.rows[i].cells[j + count].style.backgroundColor = "grey";
               }
-            } 
-            else 
+            }
+            else
             {
-              //change the color back to what it for the rest of the row that the ship was in 
+              //change the color back to what it for the rest of the row that the ship was in
               let count = 0;
-              while (count + j < 8) 
+              while (count + j < 8)
               {
                 if (table.rows[i].cells[j + count].innerHTML != "") //if no ship already placed
                   table.rows[i].cells[j + count].style.backgroundColor = "lightblue"; //back to water
@@ -160,24 +162,24 @@ function placeShip(size, horizontal, shipId)
                 count++;
               }
             }
-          } 
-          else //if the ship outline was vertical 
+          }
+          else //if the ship outline was vertical
           {
             if (i + size <= 8) //if the ship doesn't go off the board
             {
-              for (let count = 0; count < size; count++) 
+              for (let count = 0; count < size; count++)
               {
                 if (table.rows[i + count].cells[j].innerHTML != "") //if not an existing ship
                   table.rows[i + count].cells[j].style.backgroundColor ="lightblue"; //back to water
                 else
                   table.rows[i + count].cells[j].style.backgroundColor = "grey";
               }
-            } 
+            }
             else //if the ship goes off the bounds of the board
             {
-              let count = 0; 
+              let count = 0;
               //avoids going out of bounds in table
-              while (count + i < 8) 
+              while (count + i < 8)
               {
                 if (table.rows[i + count].cells[j].innerHTML != "")
                   table.rows[i + count].cells[j].style.backgroundColor =  "lightblue";
@@ -190,7 +192,7 @@ function placeShip(size, horizontal, shipId)
         };
 
         //if the user clicks to place the ship
-        table.rows[i].cells[j].onclick = function() 
+        table.rows[i].cells[j].onclick = function()
         {
           let sizeNum = Number(size);
 
@@ -199,7 +201,7 @@ function placeShip(size, horizontal, shipId)
             let tempCoords = (i+1) + ":" + (j+1);
             buttonHandlerSetup(shipId, tempCoords, size, horizontal);
 
-            if (horizontal) 
+            if (horizontal)
             {
               if (j + sizeNum <= 8) {
                 for (let count = 0; count < sizeNum; count++) {
@@ -207,8 +209,8 @@ function placeShip(size, horizontal, shipId)
                   table.rows[i].cells[j + count].innerHTML = "";
                 }
               }
-            } 
-            else 
+            }
+            else
             {
               if (i + sizeNum <= 8) {
                 for (let count = 0; count < sizeNum; count++) {
@@ -221,9 +223,9 @@ function placeShip(size, horizontal, shipId)
           {
             //while still placing ships, ask for a new orientation after each one is placed
             let horizontal = prompt("Now please choose an orientation for this ship. Type 1 for horizontal or 2 for vertical");
-            
+
             //validate the input
-            while (horizontal < 1 || horizontal > 2 || horizontal % 1 != 0 || horizontal === null ) 
+            while (horizontal < 1 || horizontal > 2 || horizontal % 1 != 0 || horizontal === null )
             {
               horizontal = prompt("Type 1 for horizontal or 2 for vertical");
             }
@@ -235,10 +237,10 @@ function placeShip(size, horizontal, shipId)
             }
             else
             {
-              //call the placeship function for the next smallest ship 
+              //call the placeship function for the next smallest ship
               placeShip(sizeNum -1, false, shipId);
             }
-          } 
+          }
           else
           {
             //hide the ship board
@@ -267,7 +269,7 @@ function placeShip(size, horizontal, shipId)
             }
           }
           }
-        }; //end of onclick function 
+        }; //end of onclick function
       }
     }
   }
@@ -305,12 +307,12 @@ function changeColor(sizee, horizontal, color, tableID) {
             let existingShip = false;
             if (horizontal) {
               if (j + size <= 8) {
-                for (let count = 0; count < size; count++) 
+                for (let count = 0; count < size; count++)
                 {
                   if (table.rows[i].cells[j + count].innerHTML === "")
-                    existingShip = true; 
+                    existingShip = true;
                 }
-                for (let count = 0; count < size; count++) 
+                for (let count = 0; count < size; count++)
                 {
                   if (existingShip)
                   {
@@ -330,17 +332,17 @@ function changeColor(sizee, horizontal, color, tableID) {
                   count++;
                 }
               }
-            } 
-            else //if vertical 
+            }
+            else //if vertical
             {
-              if (i + size <= 8) 
+              if (i + size <= 8)
               {
-                for (let count = 0; count < size; count++) 
+                for (let count = 0; count < size; count++)
                 {
                   if (table.rows[i+count].cells[j].innerHTML === "")
                     existingShip = true;
                 }
-                for (let count = 0; count < size; count++) 
+                for (let count = 0; count < size; count++)
                 {
                   if (existingShip)
                   {
@@ -359,7 +361,7 @@ function changeColor(sizee, horizontal, color, tableID) {
                       table.rows[i + count].cells[j].style.backgroundColor = "red";
                     count++;
                   }
-                } 
+                }
             }
           }; //end of anonymous function
       }
@@ -368,9 +370,9 @@ function changeColor(sizee, horizontal, color, tableID) {
 } //end of changecolor
 
 
-/** 
+/**
  * [Member of gui.js]
- * Creates the {@link Executive} object and calls {@link makeTempObj}.  Launched when 
+ * Creates the {@link Executive} object and calls {@link makeTempObj}.  Launched when
  * submitting information in setup.html.
  */
 function createExec(){
@@ -394,7 +396,7 @@ function createExec(){
 
 /**
  * [Member of gui.js]
- * Handles button clicks on the game maps, filters for just the firing map, calls 
+ * Handles button clicks on the game maps, filters for just the firing map, calls
  * {@link Exec#updateTable} to update the firing map, and enables the "next turn" button.
  * @param {string} tableId - id of the table that triggered the onclick event.
  * @param {string} coords - coordinates for a specific cell in the table.
@@ -446,7 +448,7 @@ function buttonHandler(tableId, coords){
 
 /**
  * [Member of gui.js]
- * Handles button clicks on the setup page, passes the relevant data to the exec object, 
+ * Handles button clicks on the setup page, passes the relevant data to the exec object,
  * calling {@link Exec#sendCoordsForPlacement}.
  * @param {string} tableId - id of the table that triggered the onclick event.
  * @param {string} coords - coordinates for a specific cell in the table.
@@ -460,11 +462,11 @@ function buttonHandlerSetup(tableId, coords, shipSize, orientation){
 
 /**
  * [Member of gui.js]
- * Adds a {@link Ship}'s basic data to an existing temporary object for storage.  
+ * Adds a {@link Ship}'s basic data to an existing temporary object for storage.
  * Also see {@link makeTempObj}.
  * @param {string} coords - the starting coordinate for the Ship being processed.
  * @param {number} shipSize - the size of the Ship.
- * @param {boolean} orientation - the orientation of the Ship, true for horizontal, false for vertical. 
+ * @param {boolean} orientation - the orientation of the Ship, true for horizontal, false for vertical.
  */
 function saveShip(coords, shipSize, orientation) {
   if(exec.m_playerTurn == 1) {
@@ -482,9 +484,9 @@ function saveShip(coords, shipSize, orientation) {
 
 /**
  * [Member of gui.js]
- * Stores the completed temporary object in the session storage after all ships are placed, 
+ * Stores the completed temporary object in the session storage after all ships are placed,
  * and navigates to the index page.
- * @param {Object} tempObj - object containing the necessary information to generate a new 
+ * @param {Object} tempObj - object containing the necessary information to generate a new
  * {@link Exec} object with all members initialized.
  */
 function storeExecObj(tempObj){
@@ -504,11 +506,11 @@ function pullExecObj(){
 
 /**
  * [Member of gui.js]
- * Initializes the game by retrieving game data from sessionStorage in index.html, 
+ * Initializes the game by retrieving game data from sessionStorage in index.html,
  * calling {@link reconstruct}, and calling {@link Exec#refreshMap}.
  */
 function onLoadPull(){
-    
+
     placeholder = pullExecObj();
     reconstruct(placeholder);
     exec.refreshMap();
@@ -516,9 +518,9 @@ function onLoadPull(){
 
 /**
  * [Member of gui.js]
- * Creates a temporary object which will be saved in session storage 
- * and assigns to it the basic data necessary to reconstruct an 
- * {@link Exec} object with everything it contains.  
+ * Creates a temporary object which will be saved in session storage
+ * and assigns to it the basic data necessary to reconstruct an
+ * {@link Exec} object with everything it contains.
  * Also see {@link saveShip} and {@link reconstruct}.
  * @param {Exec} exec - the Exec object created in setup.html.
  */
@@ -535,9 +537,9 @@ function makeTempObj(exec) {
 
 /**
  * [Member of gui.js]
- * Constructs an {@link Exec} object in index.html and populates it with all 
+ * Constructs an {@link Exec} object in index.html and populates it with all
  * data from a temporary object.  Also see {@link makeTempObj} and {@link saveShip}.
- * @param {Object} obj - a temporary object pulled from session storage, which 
+ * @param {Object} obj - a temporary object pulled from session storage, which
  * contains the necessary data to create and populate the Exec object.
  */
 function reconstruct(obj) {
@@ -612,5 +614,28 @@ function turnButton(){
         temp.value = "End Turn";
         //disable button
         temp.disabled = true;
-    }  
+    }
+}
+
+/**
+ * [Member of gui.js]
+ * Changes GUI labels and select forms based on playing against another player or AI
+ */
+ function onChange()
+{
+  let value = document.getElementById("AI_selector").value
+  if(value == "bot"){
+    document.getElementById("player2_label").innerHTML = "Select Bot Difficulty: ";
+    document.getElementById("AI_difficulty").disabled = false;
+    document.getElementById("AI_difficulty").style.visibility = "visible";
+    document.getElementById("player2").disabled = true;
+    document.getElementById("player2").style.visibility = "hidden";
+  }
+  else{
+    document.getElementById("player2_label").innerHTML = "Enter name of player 2: ";
+    document.getElementById("AI_difficulty").disabled = true;
+    document.getElementById("AI_difficulty").style.visibility = "hidden";
+    document.getElementById("player2").disabled = false;
+    document.getElementById("player2").style.visibility = "visible";
+  }
 }
