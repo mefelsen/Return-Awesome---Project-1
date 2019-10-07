@@ -31,7 +31,6 @@ function setPlayerNames() {
     p2 = document.getElementById("player2").placeholder;
   }
 }
-
 /**
  * [Member of gui.js]
  * This function asks the user how many ships they want to use and begins to place ships
@@ -390,7 +389,7 @@ function createExec(){
     tempNumShips = newString.substring(16);
     tempNumShips= tempNumShips.substring(0,tempNumShips.indexOf(" "));
 
-    exec = new Exec(tempAdmr1, tempAdmr2, tempNumShips);
+    exec = new Exec(tempAdmr1, tempAdmr2, tempNumShips, document.getElementById('AI_difficulty').value);
     makeTempObj(exec);
 }
 
@@ -533,6 +532,7 @@ function makeTempObj(exec) {
   tempObj.adm1Ori = new Array(num);
   tempObj.adm2Coords = new Array(num);
   tempObj.adm2Ori = new Array(num);
+  tempObj.botDifficulty = document.getElementById('AI_difficulty').value;
 }
 
 /**
@@ -543,7 +543,7 @@ function makeTempObj(exec) {
  * contains the necessary data to create and populate the Exec object.
  */
 function reconstruct(obj) {
-  exec = new Exec(obj.adm1Name, obj.adm2Name, obj.numShips);
+  exec = new Exec(obj.adm1Name, obj.adm2Name, obj.numShips, obj.botDifficulty);
   for(let i = 0; i < obj.numShips; i++)
   {
     exec.admir1.assignCoords(obj.adm1Coords[i], (i + 1), obj.adm1Ori[i], "ship1");
@@ -634,6 +634,7 @@ function turnButton(){
   else{
     document.getElementById("player2_label").innerHTML = "Enter name of player 2: ";
     document.getElementById("AI_difficulty").disabled = true;
+    document.getElementById("AI_difficulty").value = "0";
     document.getElementById("AI_difficulty").style.visibility = "hidden";
     document.getElementById("player2").disabled = false;
     document.getElementById("player2").style.visibility = "visible";

@@ -2,24 +2,23 @@
  * Class that contains one player's data.
  * @param {number} num - The number of ships being placed in the game.
  * @param {string} pName - the name of the player.
+ * @param {string} isBot - is the player a bot or not. 0 = no bot, 1-3 are bot difficulty
  * @prop {Config} config - a {@link Config} object.
  * @prop {number} numships - the number of Ships in Admiral.
  * @prop {Grid} board - a Grid to store the Admiral's game map, with dimensions given in config.
  * @prop {Ship[]} fleet - an array of Ships, initialized empty.
  * @prop {number} afloat - the number of ships that are still afloat.
  * @prop {string} name - the player's name.
- * @prop {number} difficulty - The difficulty the AI will play at
  * @prop {Array<Array<number>>} alreadyGuessed
  */
 class Admiral {
-  constructor(num, pName) {
+  constructor(num, pName, isBot) {
     this.config = new Config();
     this.numShips = num;
     this.board = new Grid(this.config.BOARD_SIZE);
     this.fleet = [];
     this.afloat = num;
     this.name = pName;
-    this.difficulty = undefined;
     this.alreadyGuessed = new Array(8);
     for(let i = 0; i < 8; i++){//Make this configurable, should be variable "size" found in Config.js
         this.alreadyGuessed[i] = new Array(8);
@@ -201,37 +200,21 @@ class Admiral {
     this.board.refreshTable("fire1", false);
   }
 
-  /**
-   * Adjusts the difficulty based on what the user selects at the start of the game
-   */
-   selectDifficulty(){
-     select = document.getElementById("AI_difficulty").value;
-     if(select == "easy") {
-       difficulty = 1;
-     }
-     else if (select == "medium") {
-       difficulty = 2;
-     }
-     else if(select == "hard"){
-       difficulty = 3;
-     }
-   }
-
    /** This method is the same as updateHit(), but coordinates are chosen via the bot and not through the user
     * Handles an attempted hit on the board and ship.  Calls updateCell on this Admiral's board, and calls hitShip if the hit attempt is successful.
     * @param {string} AIcoord : the coordinate to check.
     * @param {string} tableID : the identifier of the table to update.
     * @return {boolean} hitBoard : true if a ship was hit, false if it was a miss.
     */
-   AIupdateHit(tableID, difficulty) {
+   AIupdateHit(tableID, isBot) {
      let coord;
-     if(difficulty == 1) {
+     if(isBot == "1") {
        coord = easyAttack();
      }
-     else if(difficulty == 2) {
+     else if(isBot == "2") {
        //Medium Attack Here
      }
-    else if(difficulty == 3) {
+    else if(isBot == "3") {
       //Hard Attack Here
     }
     let hitBoard = this.board.updateCell(coord, tableID);

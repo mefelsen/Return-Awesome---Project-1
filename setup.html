@@ -16,16 +16,31 @@
 
 <body>
     <div>
-        <h2 id="instructions">Welcome to Battleship!</h2> 
+        <h2 id="instructions">Welcome to Battleship!</h2>
         <h5 id="instructions">Please input the player names then click the button to start placing ships</h5>
+        <br>
+
         <form id="form" onsubmit="return false;">
+            <label for="AI">Do you want to play against a bot or another player? </label>
+            <select id="AI_selector"onChange="onChange()">
+              <option value="player" id="player">Player </option>
+              <option value="bot" id="bot">Bot </option>
+            </select>
+            <br>
 
             <label for="Player1">Enter name of player 1: </label>
             <input type="text" id="player1" placeholder="player1" />
             <br>
 
-            <label for="Player2">Enter name of player 2: </label>
+            <label for="Player2" id ="player2_label">Enter name of player 2: </label>
             <input type="text" id="player2" placeholder="player2" />
+
+            <select id="AI_difficulty" disabled="true" style="visibility:hidden">
+              <option value="0"></option>
+              <option value="1">Easy </option>
+              <option value="2">Medium </option>
+              <option value="3">Hard </option>
+            </select>
             <br>
 
 
@@ -40,7 +55,7 @@
 
             <button class="button" onclick="setShipCount('ship2');" id="test">Click here to start placing your
                 ships</button>
-            <!-- 
+            <!--
             <input type="radio" value="horizontal" name="orientation" id="orientation1">Horizontal
             <input type="radio" value="vertical" name="orientation" id="orientation2">Vertical -->
 

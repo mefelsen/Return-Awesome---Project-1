@@ -9,14 +9,15 @@
  * @prop {number} m_playerTurn - 1 for the first player, or 2 for the second player.
  * @prop {Admiral} admir1 - the Admiral object for the first player.
  * @prop {Admiral} admir2 - the Admiral object for the second player.
+ * @prop {string} botDifficulty - 0 if player, 1-3 for bot difficulty
  */
-class Exec{   
-    constructor(adm1Name, adm2Name, numShips){
+class Exec{
+    constructor(adm1Name, adm2Name, numShips, botDifficulty){
         this.m_shipCount = numShips;
         //player turn updated each turn, adm1 = odd, adm2 = even?
         this.m_playerTurn = 1;
-        this.admir1 = new Admiral(numShips, adm1Name);
-        this.admir2 = new Admiral(numShips, adm2Name);  
+        this.admir1 = new Admiral(numShips, adm1Name, 0);
+        this.admir2 = new Admiral(numShips, adm2Name, botDifficulty);
     }
 
      /**
@@ -29,7 +30,7 @@ class Exec{
         let isAhit;
         if(this.getPlayerTurn() === 1){
             isAhit = this.admir2.updateHit(coord, tableID);
-            this.endGameChecker(1);            
+            this.endGameChecker(1);
         }
         else if(this.getPlayerTurn() == 2){
             isAhit = this.admir1.updateHit(coord, tableID);
@@ -66,8 +67,8 @@ class Exec{
                 document.getElementById("turnButton").style.display = "none";
             }
         }
-    
-    
+
+
     /**
      * Sends the given data to the current player's {@link Admiral} to handle ship placement. Calls {@link Admiral#assignCoords}.
      * @param {string} tableId: valid id for the table.
@@ -86,7 +87,7 @@ class Exec{
             console.log("something went wrong with the sendCoordsForPlacement function");
         }
     }
-    
+
     /**
      * Determines whether the current player is admir1 or admir2
      * @return {number}: 1 for the first player, 2 for the second player.
@@ -106,7 +107,7 @@ class Exec{
             this.m_playerTurn = 1;
         }
     }
-    
+
     /**
      * Refreshes both displayed tables to show the current player's game board.  Calls {@link Admiral#refreshOnStart}.
      */
@@ -135,7 +136,7 @@ class Exec{
         else{
             this.updateName();
             this.admir1.refreshFireOnly();
-        }   
+        }
     }
 
     /**
