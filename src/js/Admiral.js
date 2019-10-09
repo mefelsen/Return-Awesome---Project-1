@@ -10,6 +10,7 @@
  * @prop {number} afloat - the number of ships that are still afloat.
  * @prop {string} name - the player's name.
  * @prop {Array<Array<number>>} alreadyGuessed
+ * @prop {string} botDifficulty - variable used that is initialized to isBot. Used after construction
  */
 class Admiral {
   constructor(num, pName, isBot) {
@@ -20,6 +21,7 @@ class Admiral {
     this.afloat = num;
     this.name = pName;
     this.alreadyGuessed = new Array(8);
+    this.botDifficulty = isBot;
     for(let i = 0; i < 8; i++){//Make this configurable, should be variable "size" found in Config.js
         this.alreadyGuessed[i] = new Array(8);
         for(let j = 0; j < 8; j++){
@@ -230,12 +232,13 @@ class Admiral {
     * @return {string} guess : the randomly choosen coordinate to be returned to AIupdateHit and passed to updateCell()
     */
    easyAttack() {
-     let i = undefined;
-     let j = undefined;
+     let i;
+     let j;
+     console.log(typeof(i));
      do {
        i  = Math.floor(Math.random() * 8) + 1;
        j = Math.floor(Math.random() * 8) + 1;
-     } while(alreadyGuessed[i][j] != 1);
+     } while(this.alreadyGuessed[i][j] != 1);
      let guess = i.ToString(10) + ":" + j.ToString(10);
      return guess;
    }
