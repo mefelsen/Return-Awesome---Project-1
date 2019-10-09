@@ -5,7 +5,7 @@
  * @param {string} adm1Name - Admiral 1's nickname.
  * @param {string} adm2Name - Admiral 2's nickname.
  * @param {number} numShips - number of playable ships per Admiral.
- * @prop {string} botDifficulty - 0 if player, 1-3 for bot difficulty.
+ * @param {string} botDifficulty - 0 if player, 1-3 for bot difficulty.
  * @prop {number} m_shipCount - the number of playable ships per Admiral.
  * @prop {number} m_playerTurn - 1 for the first player, or 2 for the second player.
  * @prop {Admiral} admir1 - the Admiral object for the first player.
