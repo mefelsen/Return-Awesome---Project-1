@@ -230,13 +230,21 @@ class Admiral {
     * @return {string} guess : the randomly choosen coordinate to be returned to AIupdateHit and passed to updateCell()
     */
    easyAttack() {
-     let i = undefined;
-     let j = undefined;
-     do {
+     let i = Math.floor(Math.random() * 8) + 1;
+     let j = Math.floor(Math.random() * 8) + 1;
+     
+     if(alreadyGuessed[i][j] != 1) {
+          alreadyGuessed[i][j] = 1;
+       }
+       
+     while(alreadyGuessed[i][j] != 1) {
        i  = Math.floor(Math.random() * 8) + 1;
        j = Math.floor(Math.random() * 8) + 1;
-     } while(alreadyGuessed[i][j] != 1);
-       alreadyGuessed[i][j] = 1;
+         
+       if(alreadyGuessed[i][j] != 1) {
+          alreadyGuessed[i][j] = 1;
+       }
+     }
      let guess = i.ToString(10) + ":" + j.ToString(10);
      return guess;
    }
