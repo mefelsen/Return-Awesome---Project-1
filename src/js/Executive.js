@@ -16,7 +16,7 @@ class Exec{
         this.m_shipCount = numShips;
         //player turn updated each turn, adm1 = odd, adm2 = even?
         this.m_playerTurn = 1;
-        this.admir1 = new Admiral(numShips, adm1Name, 0);
+        this.admir1 = new Admiral(numShips, adm1Name, "0");
         this.admir2 = new Admiral(numShips, adm2Name, botDifficulty);
     }
 

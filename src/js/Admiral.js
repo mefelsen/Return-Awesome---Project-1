@@ -20,9 +20,9 @@ class Admiral {
     this.afloat = num;
     this.name = pName;
     this.alreadyGuessed = new Array(8);
-    for(let i = 0; i < 8; i++){//Make this configurable, should be variable "size" found in Config.js
+    for(let i = 0; i < this.config.BOARD_SIZE; i++){
         this.alreadyGuessed[i] = new Array(8);
-        for(let j = 0; j < 8; j++){
+        for(let j = 0; j < this.config.BOARD_SIZE; j++){
             this.alreadyGuessed[i][j] = 0;
         }
     }
@@ -236,6 +236,7 @@ class Admiral {
        i  = Math.floor(Math.random() * 8) + 1;
        j = Math.floor(Math.random() * 8) + 1;
      } while(alreadyGuessed[i][j] != 1);
+       alreadyGuessed[i][j] = 1;
      let guess = i.ToString(10) + ":" + j.ToString(10);
      return guess;
    }
