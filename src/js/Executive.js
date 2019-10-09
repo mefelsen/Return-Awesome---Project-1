@@ -5,18 +5,18 @@
  * @param {string} adm1Name - Admiral 1's nickname.
  * @param {string} adm2Name - Admiral 2's nickname.
  * @param {number} numShips - number of playable ships per Admiral.
+ * @param {string} botDifficulty - 0 if player, 1-3 for bot difficulty.
  * @prop {number} m_shipCount - the number of playable ships per Admiral.
  * @prop {number} m_playerTurn - 1 for the first player, or 2 for the second player.
  * @prop {Admiral} admir1 - the Admiral object for the first player.
  * @prop {Admiral} admir2 - the Admiral object for the second player.
- * @prop {string} botDifficulty - 0 if player, 1-3 for bot difficulty
  */
 class Exec{
     constructor(adm1Name, adm2Name, numShips, botDifficulty){
         this.m_shipCount = numShips;
         //player turn updated each turn, adm1 = odd, adm2 = even?
         this.m_playerTurn = 1;
-        this.admir1 = new Admiral(numShips, adm1Name, 0);
+        this.admir1 = new Admiral(numShips, adm1Name, "0");
         this.admir2 = new Admiral(numShips, adm2Name, botDifficulty);
     }
 

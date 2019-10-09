@@ -22,9 +22,9 @@ class Admiral {
     this.name = pName;
     this.alreadyGuessed = new Array(8);
     this.botDifficulty = isBot;
-    for(let i = 0; i < 8; i++){//Make this configurable, should be variable "size" found in Config.js
+    for(let i = 0; i < this.config.BOARD_SIZE; i++){//Make this configurable, should be variable "size" found in Config.js
         this.alreadyGuessed[i] = new Array(8);
-        for(let j = 0; j < 8; j++){
+        for(let j = 0; j < this.config.BOARD_SIZE; j++){
             this.alreadyGuessed[i][j] = 0;
         }
     }
@@ -232,14 +232,22 @@ class Admiral {
     * @return {string} guess : the randomly choosen coordinate to be returned to AIupdateHit and passed to updateCell()
     */
    easyAttack() {
-     let i;
-     let j;
-     console.log(typeof(i));
-     do {
+     let i = Math.floor(Math.random() * 8) + 1;
+     let j = Math.floor(Math.random() * 8) + 1;
+
+     if(this.alreadyGuessed[i][j] != 1) {
+          this.alreadyGuessed[i][j] = 1;
+       }
+
+     while(this.alreadyGuessed[i][j] != 1) {
        i  = Math.floor(Math.random() * 8) + 1;
        j = Math.floor(Math.random() * 8) + 1;
-     } while(this.alreadyGuessed[i][j] != 1);
-     let guess = i.ToString(10) + ":" + j.ToString(10);
+
+       if(this.alreadyGuessed[i][j] != 1) {
+          this.alreadyGuessed[i][j] = 1;
+       }
+     }
+     let guess = i.toString(10) + ":" + j.toString(10);
      return guess;
    }
 }
