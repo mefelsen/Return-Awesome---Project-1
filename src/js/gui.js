@@ -595,7 +595,14 @@ function turnButton(){
         document.getElementById("p1progress").style.display = "none";
         document.getElementById("p2progress").style.display = "none";
         //update home button text to next value
-        temp.value = "Player Start";
+        if(getIsBot())
+        {
+            temp.value = "Click to start Bot's turn";
+        }
+        else
+        {
+            temp.value = "Player Start";
+        }
         exec.advancePlayerTurn();
         exec.refreshMap();
         exec.refreshFireMap();
