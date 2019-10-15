@@ -209,9 +209,9 @@ class Admiral {
     * @return {boolean} hitBoard : true if a ship was hit, false if it was a miss.
     */
    AIupdateHit(tableID, isBot) {
-     let coord;
+     let coord = "";
      if(isBot == "1") {
-       coord = easyAttack();
+       coord = this.easyAttack();
      }
      else if(isBot == "2") {
        //Medium Attack Here

@@ -595,10 +595,25 @@ function turnButton(){
         document.getElementById("p1progress").style.display = "none";
         document.getElementById("p2progress").style.display = "none";
         //update home button text to next value
-        temp.value = "Player Start";
+        if(exec.admir2.botDifficulty == "0")
+        {
+          temp.value = "Player Start";
+        }
+        else
+        {
+          temp.value = "Bot Start";
+        }
         exec.advancePlayerTurn();
         exec.refreshMap();
         exec.refreshFireMap();
+    }
+    else if(temp.value == "Bot Start")
+    {//Bot is firing on player1's firing board. Other than that it works
+      exec.advancePlayerTurn();
+      exec.refreshMap();
+      exec.refreshFireMap();
+      exec.admir2.AIupdateHit("fire1", exec.admir2.botDifficulty);
+      temp.value = "Player Start";
     }
     else{
 
@@ -630,6 +645,7 @@ function turnButton(){
     document.getElementById("AI_difficulty").style.visibility = "visible";
     document.getElementById("player2").disabled = true;
     document.getElementById("player2").style.visibility = "hidden";
+    document.getElementById("player2").value = "Bot";
   }
   else{
     document.getElementById("player2_label").innerHTML = "Enter name of player 2: ";
@@ -638,5 +654,6 @@ function turnButton(){
     document.getElementById("AI_difficulty").style.visibility = "hidden";
     document.getElementById("player2").disabled = false;
     document.getElementById("player2").style.visibility = "visible";
+    document.getElementById("player2").value = "";
   }
 }
