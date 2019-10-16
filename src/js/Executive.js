@@ -181,5 +181,13 @@ class Exec{
             }
         }
     }
+    
+    /**
+    * Checks if player2 is a bot or not. Returns true if bot, false otherwise.
+    */
+    getIsBot()
+    {
+        return this.botDifficulty == "0" ? 0 : 1;
+    }
 
 }
