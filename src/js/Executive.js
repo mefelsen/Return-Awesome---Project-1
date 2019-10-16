@@ -77,13 +77,16 @@ class Exec{
      * @param {boolean} orientation: orientation of the ship being constructed: true for horizontal, false for vertical.
      */
     sendCoordsForPlacement(tableId, coords, shipSize, orientation){
-        if(this.getPlayerTurn() == 1){
+        if(this.getPlayerTurn() == 1)
+        {
             this.admir1.assignCoords(coords,shipSize, orientation,tableId);
         }
-        else if (this.getPlayerTurn() == 2){
-            this.admir2.assignCoords(coords,shipSize,orientation,tableId);
+        else if (this.getPlayerTurn() == 2)
+        {
+          this.admir2.assignCoords(coords,shipSize,orientation,tableId);
         }
-        else{
+        else
+        {
             console.log("something went wrong with the sendCoordsForPlacement function");
         }
     }
@@ -177,13 +180,6 @@ class Exec{
                 document.getElementById("p2updates").innerHTML += "*Your ship of size "+(i+1)+" was sunk" +  "<br />";
             }
         }
-    }
-    /**
-    * Checks if player2 is a bot or not. Returns true if bot, false otherwise.
-    */
-    getIsBot()
-    {
-        return this.botDifficulty == "0" ? 0 : 1;
     }
 
 }
