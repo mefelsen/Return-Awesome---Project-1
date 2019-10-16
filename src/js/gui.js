@@ -138,8 +138,8 @@ function placeShip(size, horizontal, shipId)
     let table = document.getElementById(shipId);
 
     //this if is for if player 1 or player 2 but not bot are picking placement for their ships
-    //if(shipId ==="ship1" || (shipId != "ship1" && document.getElementById("AI_selector").value != "bot"))
-    //{
+  //  if(shipId ==="ship1" || (shipId != "ship1" && document.getElementById("AI_selector").value != "bot"))
+  //  {
   //if the table isn't empty, begin to show the user places they can place their ships
   if (table != null)
   {
@@ -306,14 +306,21 @@ function placeShip(size, horizontal, shipId)
       //}
       }
     }
-  //}
-  
-    //this else is for the bot random placement without clicks, not coded, so bot can't randomly place.
-    //else
-    //{
+  }
 
-    //}
-}
+    //this else is for the bot random placement without clicks, not coded, so bot can't randomly place.
+    /*else
+    {
+      let sizeNum = Number(size);
+      i = Math.floor(Math.random()*8);
+      j = Math.floor(Math.random()*8);
+      let tempCoords = (i+1) + ":" + (j+1);
+      if((i+sizeNum<9) || (j+sizeNum < 9) || (i>1) || (j>1))//is valid
+      {
+        buttonHandlerSetup(shipId, tempCoords, size, horizontal);
+      }
+    }*/
+  //}
 }
 
 /**
