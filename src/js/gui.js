@@ -71,10 +71,18 @@ function setShipCount(shipId) {
     "You have chosen " + numShips + " ships";
 
   //prompt for the orientation of the ship and check for valid input
- let direction = prompt("Now please choose an orientation for this ship. Type 1 for horizontal or 2 for vertical");
-  while (direction < 1 ||direction > 2 || direction % 1 != 0 ||direction === null)
+  let direction;
+  if((shipId === "ship1") || (shipId != "ship1" && document.getElementById("AI_selector").value != "bot"))
   {
+    direction = prompt("Now please choose an orientation for this ship. Type 1 for horizontal or 2 for vertical");
+    while (direction < 1 ||direction > 2 || direction % 1 != 0 ||direction === null)
+    {
     direction = prompt("Type 1 for horizontal or 2 for vertical");
+    }
+  }
+  else
+  {
+    direction = Math.floor(Math.random() * 2)+1;
   }
   //change/confirm the intput is a number
   direction = parseInt(direction, 10);
@@ -115,12 +123,23 @@ function placeShip(size, horizontal, shipId)
   {
     document.getElementById("placement").innerHTML = p1 + ", place your 1x" + size + " ship!";
   }
-  if(shipId==="ship2")
+  else if(shipId==="ship2")
   {
-    document.getElementById("placement").innerHTML = p2 + ", place your 1x" + size + " ship!";
+    if(document.getElementById("AI_selector").value == "bot")
+    {
+      document.getElementById("placement").innerHTML = "Press button to randomly place bot ships.";
+    }
+    else
+    {
+      document.getElementById("placement").innerHTML = p2 + ", place your 1x" + size + " ship!";
+    }
   }
-  let table = document.getElementById(shipId);
 
+    let table = document.getElementById(shipId);
+
+    //this if is for if player 1 or player 2 but not bot are picking placement for their ships
+    //if(shipId ==="ship1" || (shipId != "ship1" && document.getElementById("AI_selector").value != "bot"))
+    //{
   //if the table isn't empty, begin to show the user places they can place their ships
   if (table != null)
   {
@@ -191,6 +210,7 @@ function placeShip(size, horizontal, shipId)
         };
 
         //if the user clicks to place the ship
+        //need to copy, edit, and paste this for bot on click after player1 sets all of his ships.
         table.rows[i].cells[j].onclick = function()
         {
           let sizeNum = Number(size);
@@ -219,59 +239,81 @@ function placeShip(size, horizontal, shipId)
               }
             }
             if (sizeNum !== 1)
-          {
-            //while still placing ships, ask for a new orientation after each one is placed
-            let horizontal = prompt("Now please choose an orientation for this ship. Type 1 for horizontal or 2 for vertical");
-
-            //validate the input
-            while (horizontal < 1 || horizontal > 2 || horizontal % 1 != 0 || horizontal === null )
             {
-              horizontal = prompt("Type 1 for horizontal or 2 for vertical");
-            }
-            horizontal = Number(horizontal);
-            if (horizontal === 1)
-            {
-              //call the placeship function for the next smallest ship
-              placeShip(sizeNum-1, true, shipId);
-            }
-            else
-            {
-              //call the placeship function for the next smallest ship
-              placeShip(sizeNum -1, false, shipId);
-            }
-          }
-          else
-          {
-            //hide the ship board
-            document.getElementById(shipId).style.display = "none";
-            if (shipId === "ship1")
-            {
-              //player 1 just finished, hide their board and display player 2's
-              document.getElementById("test").style.display = "block";
-              document.getElementById("ships").style.display = "none";
-              document.getElementById("names").style.display = "none";
-              document.getElementById("placement").style.display = "none";
-              document.getElementById("button1").style.display = "none";
-              alert("You have placed all of your ships. Please switch players now!");
-              exec.advancePlayerTurn();
+              //while still placing ships, ask for a new orientation after each one is placed
+              let horizontal;
+              if((shipId === "ship1") || (shipId != "ship1" && document.getElementById("AI_selector").value != "bot"))
+              {
+                horizontal = prompt("Now please choose an orientation for this ship. Type 1 for horizontal or 2 for vertical");
+              }
+              else
+              {
+                horizontal = Math.floor(Math.random() * 2)+1;
+              }
+              //validate the input
+              while (horizontal < 1 || horizontal > 2 || horizontal % 1 != 0 || horizontal === null )
+              {
+                horizontal = prompt("Type 1 for horizontal or 2 for vertical");
+              }
+              horizontal = Number(horizontal);
+              if (horizontal === 1)
+              {
+                //call the placeship function for the next smallest ship
+                placeShip(sizeNum-1, true, shipId);
+              }
+              else
+              {
+                //call the placeship function for the next smallest ship
+                placeShip(sizeNum -1, false, shipId);
+              }
             }
             else
             {
-              //player 1 and player 2 have no finished. Moving to start the game
-              document.getElementById("test").style.display = "none";
-              document.getElementById("ships").style.display = "none";
-              document.getElementById("names").style.display = "none";
-              document.getElementById("placement").style.display = "none";
-              alert("Press ok to start the game");
-              exec.advancePlayerTurn();
-              storeExecObj(tempObj);
+              //hide the ship board
+              document.getElementById(shipId).style.display = "none";
+              if (shipId === "ship1")
+              {
+                //player 1 just finished, hide their board and display player 2's
+                document.getElementById("test").style.display = "block";
+                document.getElementById("ships").style.display = "none";
+                document.getElementById("names").style.display = "none";
+                document.getElementById("placement").style.display = "none";
+                document.getElementById("button1").style.display = "none";
+                if(document.getElementById("AI_selector").value == "bot")
+                {
+                  alert("You have placed all of your ships.")
+                }
+                else
+                {
+                  alert("You have placed all of your ships. Please switch players now!");
+                }
+                exec.advancePlayerTurn();
+              }
+              else
+              {
+                //player 1 and player 2 have no finished. Moving to start the game
+                document.getElementById("test").style.display = "none";
+                document.getElementById("ships").style.display = "none";
+                document.getElementById("names").style.display = "none";
+                document.getElementById("placement").style.display = "none";
+                alert("Press ok to start the game");
+                exec.advancePlayerTurn();
+                storeExecObj(tempObj);
+              }
             }
-          }
           }
         }; //end of onclick function
+      //}
       }
     }
-  }
+  //}
+  
+    //this else is for the bot random placement without clicks, not coded, so bot can't randomly place.
+    //else
+    //{
+
+    //}
+}
 }
 
 /**
@@ -602,18 +644,12 @@ function turnButton(){
         document.getElementById("p1progress").style.display = "none";
         document.getElementById("p2progress").style.display = "none";
         //update home button text to next value
-        if(exec.admir2.botDifficulty == "0")
-        {
-          temp.value = "Player Start";
-        }
-        else
-        {
-          temp.value = "Bot Start";
-        }
+        temp.value = "Player Start";
         exec.advancePlayerTurn();
         exec.refreshMap();
         exec.refreshFireMap();
     }
+<<<<<<< HEAD
     else if(temp.value == "Bot Start")
     {
       let coord = exec.admir2.AIupdateHit("fire1",exec.admir2.botDifficulty);
@@ -623,6 +659,8 @@ function turnButton(){
       exec.refreshFireMap();
       temp.value = "Player Start";
     }
+=======
+>>>>>>> 26848faf7a7743552f3a7d15d51b1edaf981c096
     else{
 
         //show tables
@@ -653,7 +691,6 @@ function turnButton(){
     document.getElementById("AI_difficulty").style.visibility = "visible";
     document.getElementById("player2").disabled = true;
     document.getElementById("player2").style.visibility = "hidden";
-    document.getElementById("player2").value = "Bot";
   }
   else{
     document.getElementById("player2_label").innerHTML = "Enter name of player 2: ";
@@ -662,6 +699,5 @@ function turnButton(){
     document.getElementById("AI_difficulty").style.visibility = "hidden";
     document.getElementById("player2").disabled = false;
     document.getElementById("player2").style.visibility = "visible";
-    document.getElementById("player2").value = "";
   }
 }
