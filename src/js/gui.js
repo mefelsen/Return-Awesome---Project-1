@@ -609,10 +609,11 @@ function turnButton(){
     }
     else if(temp.value == "Bot Start")
     {//Bot is firing on player1's firing board. Other than that it works
+      let coord = exec.admir2.AIupdateHit("fire1",exec.admir2.botDifficulty);
+      buttonHandler("fire1",coord);
       exec.advancePlayerTurn();
       exec.refreshMap();
       exec.refreshFireMap();
-      exec.admir2.AIupdateHit("fire1", exec.admir2.botDifficulty);
       temp.value = "Player Start";
     }
     else{

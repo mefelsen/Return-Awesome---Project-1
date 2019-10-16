@@ -219,11 +219,7 @@ class Admiral {
     else if(isBot == "3") {
       //Hard Attack Here
     }
-    let hitBoard = this.board.updateCell(coord, tableID);
-     if(hitBoard) {
-       this.hitShip(coord);
-     }
-     return hitBoard;
+     return coord;
    }
 
    /**
