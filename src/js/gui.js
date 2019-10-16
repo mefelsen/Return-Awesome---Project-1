@@ -432,7 +432,14 @@ function buttonHandler(tableId, coords){
                 for (let j = 0; j<exec.admir1.fleet[i].coords.length; j++)
                 {
                   if (exec.admir1.fleet[i].coords[j] === coords && exec.admir1.afloat != 0) {
-                    alert("Congrats! You sunk a ship!");
+                    if(exec.getPlayerTurn() == 2 && exec.admir2.botDifficulty != "0")
+                    {
+                      alert("Bot sunk your ship!");
+                    }
+                    else
+                    {
+                      alert("Congrats! You sunk a ship!");
+                    }
                   }
                 }
             }
@@ -608,7 +615,7 @@ function turnButton(){
         exec.refreshFireMap();
     }
     else if(temp.value == "Bot Start")
-    {//Bot is firing on player1's firing board. Other than that it works
+    {
       let coord = exec.admir2.AIupdateHit("fire1",exec.admir2.botDifficulty);
       buttonHandler("fire1",coord);
       exec.advancePlayerTurn();
