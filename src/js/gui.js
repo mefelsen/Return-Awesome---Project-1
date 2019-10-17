@@ -617,8 +617,11 @@ function turnButton(){
     else if(temp.value == "Bot Start")
     {//Test
       let coord = exec.admir2.AIupdateHit("fire1",exec.admir2.botDifficulty);
-      buttonHandler("fire1",coord);
-      exec.advancePlayerTurn();
+      buttonHandler("fire1","1:8");
+      if(document.getElementById("message").innerHTML != "has won the game!!!")
+      {
+        exec.advancePlayerTurn();
+      }
       exec.refreshMap();
       exec.refreshFireMap();
       temp.value = "Player Start";
