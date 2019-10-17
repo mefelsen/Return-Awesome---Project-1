@@ -615,7 +615,7 @@ function turnButton(){
         exec.refreshFireMap();
     }
     else if(temp.value == "Bot Start")
-    {
+    {//Test
       let coord = exec.admir2.AIupdateHit("fire1",exec.admir2.botDifficulty);
       buttonHandler("fire1",coord);
       exec.advancePlayerTurn();
