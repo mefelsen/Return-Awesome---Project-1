@@ -307,7 +307,7 @@ function placeShip(size, horizontal, shipId)
       }
     }
   //}
-
+  
     //this else is for the bot random placement without clicks, not coded, so bot can't randomly place.
     //else
     //{
@@ -649,6 +649,7 @@ function turnButton(){
         exec.refreshMap();
         exec.refreshFireMap();
     }
+<<<<<<< HEAD
     else if(temp.value == "Bot Start")
     {//Test
       let coord = exec.admir2.AIupdateHit("fire1",exec.admir2.botDifficulty);
@@ -658,8 +659,9 @@ function turnButton(){
       exec.refreshFireMap();
       temp.value = "Player Start";
     }
-    else
-    {
+=======
+>>>>>>> 26848faf7a7743552f3a7d15d51b1edaf981c096
+    else{
 
         //show tables
         updateMessages();
