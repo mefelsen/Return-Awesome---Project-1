@@ -130,7 +130,7 @@ function setPlayerNames() {
    {
      if(document.getElementById("AI_selector").value == "bot")
      {
-       document.getElementById("placement").innerHTML = "Press button to randomly place bot ships.";
+       document.getElementById("placement").innerHTML = "Bot placement is happening right now.";
      }
      else
      {
@@ -663,6 +663,7 @@ function turnButton(){
           temp.value = "Bot Start";
         }
         exec.advancePlayerTurn();
+        //exec.advancePlayerTurn(); <-- for future use
         exec.refreshMap();
         exec.refreshFireMap();
     }
