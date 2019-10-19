@@ -504,6 +504,14 @@ function buttonHandler(tableId, coords){
     else{
         alert("You shouldn't fire on your own map!");
     }
+    document.getElementById("specialshot").style = "display: inline; visibility: hidden;";
+    document.getElementById("specialshot").disabled = "true";
+    document.getElementById("specialshot_button").style = "display: inline; visibility: hidden;";
+    document.getElementById("specialshot_button").disabled = "true";
+    document.getElementById("specialshot_form1").style = "display: inline; visibility: hidden;";
+    document.getElementById("specialshot_form1").disabled = "true";
+    document.getElementById("specialshot_form2").style = "display: inline; visibility: hidden;";
+    document.getElementById("specialshot_form2").disabled = "true";
 }
 
 /**
@@ -655,6 +663,15 @@ function turnButton(){
         document.getElementById("p2updates").style.display = "none";
         document.getElementById("p1progress").style.display = "none";
         document.getElementById("p2progress").style.display = "none";
+        //hide special shot elements
+        document.getElementById("specialshot").style = "display: inline; visibility: hidden;";
+        document.getElementById("specialshot").disabled = "true";
+        document.getElementById("specialshot_button").style = "display: inline; visibility: hidden;";
+        document.getElementById("specialshot_button").disabled = "true";
+        document.getElementById("specialshot_form1").style = "display: inline; visibility: hidden;";
+        document.getElementById("specialshot_form1").disabled = "true";
+        document.getElementById("specialshot_form2").style = "display: inline; visibility: hidden;";
+        document.getElementById("specialshot_form2").disabled = "true";
         //update home button text to next value
         if(exec.admir2.botDifficulty == "0")
         {
@@ -715,6 +732,26 @@ function turnButton(){
           document.getElementById("specialshot_form1").disabled = false;
           document.getElementById("specialshot_form2").style = "display: inline;";
           document.getElementById("specialshot_form2").disabled = false;
+        }
+        if(!p1_specialshot_enable && exec.getPlayerTurn() == 1) {
+          document.getElementById("specialshot").style = "display: inline; visibility: hidden;";
+          document.getElementById("specialshot").disabled = "true";
+          document.getElementById("specialshot_button").style = "display: inline; visibility: hidden;";
+          document.getElementById("specialshot_button").disabled = "true";
+          document.getElementById("specialshot_form1").style = "display: inline; visibility: hidden;";
+          document.getElementById("specialshot_form1").disabled = "true";
+          document.getElementById("specialshot_form2").style = "display: inline; visibility: hidden;";
+          document.getElementById("specialshot_form2").disabled = "true";
+        }
+        if(!p2_specialshot_enable && exec.getPlayerTurn() == 2) {
+          document.getElementById("specialshot").style = "display: inline; visibility: hidden;";
+          document.getElementById("specialshot").disabled = "true";
+          document.getElementById("specialshot_button").style = "display: inline; visibility: hidden;";
+          document.getElementById("specialshot_button").disabled = "true";
+          document.getElementById("specialshot_form1").style = "display: inline; visibility: hidden;";
+          document.getElementById("specialshot_form1").disabled = "true";
+          document.getElementById("specialshot_form2").style = "display: inline; visibility: hidden;";
+          document.getElementById("specialshot_form2").disabled = "true";
         }
     }
 }
