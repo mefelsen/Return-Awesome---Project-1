@@ -488,7 +488,7 @@ function buttonHandler(tableId, coords){
                   if (exec.admir1.fleet[i].coords[j] === coords && exec.admir1.afloat != 0) {
                     if(exec.getPlayerTurn() == 2 && exec.admir2.botDifficulty != "0")
                     {
-                      alert("Bot sunk your ship!");
+                      //alert("Bot sunk your ship!");
                     }
                     else
                     {
@@ -987,7 +987,7 @@ function specialbuttonHandler(tableId, coords){
                   if (exec.admir1.fleet[i].coords[j] === coords && exec.admir1.afloat != 0) {
                     if(exec.getPlayerTurn() == 2 && exec.admir2.botDifficulty != "0")
                     {
-                      alert("Bot sunk your ship!");
+                      //alert("Bot sunk your ship!");
                     }
                     else
                     {
