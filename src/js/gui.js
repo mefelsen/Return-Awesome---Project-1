@@ -688,15 +688,70 @@ function turnButton(){
     }
     else if(temp.value == "Bot Start")
     {//Test
-      let coord = exec.admir2.AIupdateHit("fire1",exec.admir2.botDifficulty);
-      buttonHandler("fire1",coord);
-      if(document.getElementById("message").innerHTML != "has won the game!!!")
-      {
-        exec.advancePlayerTurn();
+      if (exec.admir2.botDifficulty == "1") {
+        let coord = exec.admir2.AIupdateHit("fire1", exec.admir2.botDifficulty);
+        buttonHandler("fire1", coord);
+  
+        if (document.getElementById("message").innerHTML != "has won the game!!!") {
+          exec.advancePlayerTurn();
+        }
+        exec.refreshMap();
+        exec.refreshFireMap();
+        temp.value = "Player Start";
       }
-      exec.refreshMap();
-      exec.refreshFireMap();
-      temp.value = "Player Start";
+      else if (exec.admir2.botDifficulty == "2") {
+        //part planB
+        // let i = Math.floor(Math.random() * 8) + 1;
+        // let j = Math.floor(Math.random() * 8) + 1;
+        // let guess = i.toString(10) + ":" + j.toString(10);
+        let i
+        let j
+        var guess
+  
+        // let looped=exec.admir1.afloat
+        // let ed=looped-1
+  
+        while(!exec.admir1.gethitstute())
+        {
+          var looped=exec.admir1.afloat
+          var ed=looped-1
+          i = Math.floor(Math.random() * 8) + 1;
+          j = Math.floor(Math.random() * 8) + 1;
+          guess = i.toString(10) + ":" + j.toString(10);
+          buttonHandler("fire1", guess);
+        }
+  
+        if(looped!=ed)
+        {
+          exec.admir1.savecoord(guess)
+          rechit(exec.admir1.aIcoord)
+        }else
+        {
+          //update
+          exec.admir1.updatehitstute()
+        }
+        
+  
+        //planB
+        // while(looped!=ed)
+        // {
+        //   i = Math.floor(Math.random() * 8) + 1;
+        //   j = Math.floor(Math.random() * 8) + 1;
+        //   guess = i.toString(10) + ":" + j.toString(10);
+        //   buttonHandler("fire1", guess);
+        //   looped=exec.admir1.afloat
+        // }
+        
+        
+  
+        if(document.getElementById("message").innerHTML != "has won the game!!!")
+        {
+          exec.advancePlayerTurn();
+        }
+        exec.refreshMap();
+        exec.refreshFireMap();
+        temp.value = "Player Start";
+      }
     }
     else{
 
@@ -755,7 +810,66 @@ function turnButton(){
         }
     }
 }
-
+function check(x)
+{
+  if(x>0&&x<9)
+  {
+    return true
+  }
+  else
+  {
+    return false
+  }
+}
+function rechit(coord)
+{
+  let row=parseInt(coord.substr(0,1))
+  let col=parseInt(coord.substr(2,1))
+  //going up 
+  if(check(row-1))
+  {
+    let tothecoord= (row-1).toString(10)+":"+col.toString(10)
+    //exec.admir1.updatehitstute()
+    buttonHandler("fire1", tothecoord);
+    if(exec.admir1.gethitstute())
+    {
+      exec.admir1.savecoord(tothecoord)
+    }
+  }
+  if(check(row+1))
+  {
+    let tothecoord= (row+1).toString(10)+":"+col.toString(10)
+    //exec.admir1.updatehitstute()
+    buttonHandler("fire1", tothecoord);
+    if(exec.admir1.gethitstute())
+    {
+      exec.admir1.savecoord(tothecoord)
+    }
+   
+  }
+  if(check(col-1))
+  {
+    let tothecoord= row.toString(10)+":"+(col-1).toString(10)
+    //exec.admir1.updatehitstute()
+    buttonHandler("fire1", tothecoord);
+    if(exec.admir1.gethitstute())
+    {
+      exec.admir1.savecoord(tothecoord)
+    }
+  
+  }
+  if(check(col+1))
+  {
+    let tothecoord= row.toString(10)+":"+(col+1).toString(10)
+    //exec.admir1.updatehitstute()
+    buttonHandler("fire1", tothecoord);
+    if(exec.admir1.gethitstute())
+    {
+      exec.admir1.savecoord(tothecoord)
+    }
+   
+  }
+}
 /**
  * [Member of gui.js]
  * Changes GUI labels and select forms based on playing against another player or AI
