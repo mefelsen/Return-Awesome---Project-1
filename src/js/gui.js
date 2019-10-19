@@ -8,6 +8,8 @@ let p2;
 
 let p1_specialshot_enable = true;
 let p2_specialshot_enable = true;
+let p1_sunk_ship = false;
+let p2_sunk_ship = false;
 
 /**
  * [Member of gui.js]
@@ -755,15 +757,15 @@ function specialShot()
     alert("Select a valid location! Your special shot will go out of bounds");
   }
   else {
-    buttonHandler("fire1",i.toString() + ":" + j.toString());//middle
-    buttonHandler("fire1",i.toString() + ":" + (j-1).toString());//middle bottom
-    buttonHandler("fire1",i.toString() + ":" + (j+1).toString());//middle top
-    buttonHandler("fire1",(i-1).toString() + ":" + j.toString());//Left middle
-    buttonHandler("fire1",(i+1).toString() + ":" + j.toString());//Right middle
-    buttonHandler("fire1",(i-1).toString() + ":" + (j+1).toString());//Left top
-    buttonHandler("fire1",(i+1).toString() + ":" + (j+1).toString());//Right top
-    buttonHandler("fire1",(i-1).toString() + ":" + (j-1).toString());//Left bottom
-    buttonHandler("fire1",(i+1).toString() + ":" + (j-1).toString());//Right bottom
+    specialbuttonHandler("fire1",i.toString() + ":" + j.toString());//middle
+    specialbuttonHandler("fire1",i.toString() + ":" + (j-1).toString());//middle bottom
+    specialbuttonHandler("fire1",i.toString() + ":" + (j+1).toString());//middle top
+    specialbuttonHandler("fire1",(i-1).toString() + ":" + j.toString());//Left middle
+    specialbuttonHandler("fire1",(i+1).toString() + ":" + j.toString());//Right middle
+    specialbuttonHandler("fire1",(i-1).toString() + ":" + (j+1).toString());//Left top
+    specialbuttonHandler("fire1",(i+1).toString() + ":" + (j+1).toString());//Right top
+    specialbuttonHandler("fire1",(i-1).toString() + ":" + (j-1).toString());//Left bottom
+    specialbuttonHandler("fire1",(i+1).toString() + ":" + (j-1).toString());//Right bottom
 
     //Disable all controls after shot is used
     document.getElementById("specialshot").style = "display: inline; visibility: hidden;";
@@ -777,9 +779,77 @@ function specialShot()
 
     if(exec.getPlayerTurn() == 1) {
       p1_specialshot_enable = false;
+      if(p1_sunk_ship) {
+        alert("Congrats! You sunk a ship");
+      }
+      exec.endGameChecker(1);
     }
     else {
       p2_specialshot_enable = false;
+      if(p2_sunk_ship) {
+        alert("Congrats! You sunk a ship");
+      }
+      exec.endGameChecker(2);
     }
   }
+}
+
+/**
+ * [Member of gui.js]
+ * A altered version of buttonhandler. Specifically for special shot.
+ * Returns a bool is a ship was sunk or not after a special shot attack.
+ * {@link Exec#updateTable} to update the firing map, and enables the "next turn" button.
+ * @param {string} tableId - id of the table that triggered the onclick event.
+ * @param {string} coords - coordinates for a specific cell in the table.
+ */
+function specialbuttonHandler(tableId, coords){
+    if(tableId == "fire1"){
+        let hit = exec.specialupdateTable(coords, tableId);
+        document.getElementById("table1").classList.add("disabledButton");
+        document.getElementById("turnButton").disabled = false;
+        //exec.checkSunk();
+        if(exec.getPlayerTurn()===1)
+        {
+          document.getElementById("p1progress").style.display = "block";
+          for (let i = 0; i< exec.admir2.numShips; i++)
+          {
+            if (exec.admir2.fleet[i].status === false)
+            {
+                for (let j = 0; j<exec.admir2.fleet[i].coords.length; j++)
+                {
+                  if (exec.admir2.fleet[i].coords[j] == coords && exec.admir2.afloat != 0) {
+                    p1_sunk_ship = true;
+                  }
+                }
+            }
+          }
+        }
+        else
+        {
+          document.getElementById("p2progress").style.display = "block";
+          for (let i = 0; i< exec.admir1.numShips; i++)
+          {
+            if (exec.admir1.fleet[i].status === false)
+            {
+                for (let j = 0; j<exec.admir1.fleet[i].coords.length; j++)
+                {
+                  if (exec.admir1.fleet[i].coords[j] === coords && exec.admir1.afloat != 0) {
+                    if(exec.getPlayerTurn() == 2 && exec.admir2.botDifficulty != "0")
+                    {
+                      alert("Bot sunk your ship!");
+                    }
+                    else
+                    {
+                      p2_sunk_ship = true;
+                    }
+                  }
+                }
+            }
+          }
+
+        }
+    }
+    else{
+        alert("You shouldn't fire on your own map!");
+    }
 }

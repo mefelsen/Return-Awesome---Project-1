@@ -190,4 +190,25 @@ class Exec{
         return this.botDifficulty == "0" ? 0 : 1;
     }
 
+    /**
+    * altered version of updateTable for special shot
+    * Passes "guess" coordinates to {@link Admiral} to update the game board and Ships during gameplay.
+    * @param {string} coord - coordinates for the specific cell in the table.
+    * @param {string} tableID - the identifier specifying the table to update.
+    * @return {boolean} true if the guess is a hit, false if it's a miss.
+    */
+   specialupdateTable(coord, tableID){
+       let isAhit;
+       if(this.getPlayerTurn() === 1){
+           isAhit = this.admir2.updateHit(coord, tableID);
+       }
+       else if(this.getPlayerTurn() == 2){
+           isAhit = this.admir1.updateHit(coord, tableID);
+       }
+       else{
+           prompt("something went wrong with the playerTurn variable")
+       }
+       return(isAhit);
+   }
+
 }
