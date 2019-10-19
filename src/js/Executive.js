@@ -67,7 +67,11 @@ class Exec{
                 setTimeout("document.getElementById('youwin').play();", 3000);
             }
                 //alerts gamers to the end of the game and resets sessionStorage, also routes the game to the setup screen
-                alert(outputString);
+                if(player2!="Bot")
+                {
+                    alert(outputString);
+                }
+                
                 sessionStorage.ExecObj = {};
 
                 //displays end of game message and hides p1 ship map
