@@ -127,7 +127,7 @@ function setPlayerNames() {
    {
      if(document.getElementById("AI_selector").value == "bot")
      {
-       document.getElementById("placement").innerHTML = "Press button to randomly place bot ships.";
+       document.getElementById("placement").innerHTML = "Bot placement is happening right now.";
      }
      else
      {
@@ -660,13 +660,14 @@ function turnButton(){
           temp.value = "Bot Start";
         }
         exec.advancePlayerTurn();
+        //exec.advancePlayerTurn(); <-- for future use
         exec.refreshMap();
         exec.refreshFireMap();
     }
     else if(temp.value == "Bot Start")
     {//Test
       let coord = exec.admir2.AIupdateHit("fire1",exec.admir2.botDifficulty);
-      buttonHandler("fire1","1:8");
+      buttonHandler("fire1",coord);
       if(document.getElementById("message").innerHTML != "has won the game!!!")
       {
         exec.advancePlayerTurn();
