@@ -58,7 +58,11 @@ class Exec{
                 outputString = player2 + ", you sunk all of " + player1 + "'s battleships!";
             }
                 //alerts gamers to the end of the game and resets sessionStorage, also routes the game to the setup screen
-                alert(outputString);
+                if(player2!="Bot")
+                {
+                    alert(outputString);
+                }
+                
                 sessionStorage.ExecObj = {};
 
                 //displays end of game message and hides p1 ship map
