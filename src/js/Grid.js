@@ -81,10 +81,12 @@ class Grid{
         if(this.arr[i][j] == this.conf.oceanTypes.SHIP){
             this.arr[i][j] = this.conf.oceanTypes.HIT;
             this.isHit = true;
+            document.getElementById('shotHit').play();
         }else if(this.arr[i][j] == this.conf.oceanTypes.HIT){
             //Party Parrot dances again! (But seriously nothing goes here for a reason.)
         }else{
             this.arr[i][j] = this.conf.oceanTypes.MISS;
+            document.getElementById('shotMiss').play();
         }
         this.refreshTable(tableId, false);
         return this.isHit;
