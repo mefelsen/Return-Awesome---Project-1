@@ -6,6 +6,9 @@ let placeholder;
 let p1;
 let p2;
 
+let p1_specialshot_enable = true;
+let p2_specialshot_enable = true;
+
 /**
  * [Member of gui.js]
  * Hides instructions after users start setup.
@@ -689,6 +692,27 @@ function turnButton(){
         temp.value = "End Turn";
         //disable button
         temp.disabled = true;
+
+        if(p1_specialshot_enable && exec.getPlayerTurn() == 1) {
+          document.getElementById("specialshot").style = "display: inline;";
+          document.getElementById("specialshot").disabled = false;
+          document.getElementById("specialshot_button").style = "display: inline;";
+          document.getElementById("specialshot_button").disabled = false;
+          document.getElementById("specialshot_form1").style = "display: inline;";
+          document.getElementById("specialshot_form1").disabled = false;
+          document.getElementById("specialshot_form2").style = "display: inline;";
+          document.getElementById("specialshot_form2").disabled = false;
+        }
+        if(p2_specialshot_enable && exec.getPlayerTurn() == 2) {
+          document.getElementById("specialshot").style = "display: inline;";
+          document.getElementById("specialshot").disabled = false;
+          document.getElementById("specialshot_button").style = "display: inline;";
+          document.getElementById("specialshot_button").disabled = false;
+          document.getElementById("specialshot_form1").style = "display: inline;";
+          document.getElementById("specialshot_form1").disabled = false;
+          document.getElementById("specialshot_form2").style = "display: inline;";
+          document.getElementById("specialshot_form2").disabled = false;
+        }
     }
 }
 
@@ -739,5 +763,22 @@ function specialShot()
     buttonHandler("fire1",(i+1).toString() + ":" + (j+1).toString());//Right top
     buttonHandler("fire1",(i-1).toString() + ":" + (j-1).toString());//Left bottom
     buttonHandler("fire1",(i+1).toString() + ":" + (j-1).toString());//Right bottom
+
+    //Disable all controls after shot is used
+    document.getElementById("specialshot").style = "display: inline; visibility: hidden;";
+    document.getElementById("specialshot").disabled = "true";
+    document.getElementById("specialshot_button").style = "display: inline; visibility: hidden;";
+    document.getElementById("specialshot_button").disabled = "true";
+    document.getElementById("specialshot_form1").style = "display: inline; visibility: hidden;";
+    document.getElementById("specialshot_form1").disabled = "true";
+    document.getElementById("specialshot_form2").style = "display: inline; visibility: hidden;";
+    document.getElementById("specialshot_form2").disabled = "true";
+
+    if(exec.getPlayerTurn() == 1) {
+      p1_specialshot_enable = false;
+    }
+    else {
+      p2_specialshot_enable = false;
+    }
   }
 }
