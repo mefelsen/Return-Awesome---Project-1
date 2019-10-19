@@ -53,12 +53,25 @@ class Exec{
         if(this.admir1.afloat ==0 || this.admir2.afloat == 0){
             if(num ==1){
                 outputString = player1 + ", you sunk all of " + player2 + "'s battleships!";
+
+                document.getElementById('gameover').play();
+                setTimeout("document.getElementById('p1').play();", 100);
+                setTimeout("document.getElementById('youwin').play();", 3000);
+
             }
             else{
                 outputString = player2 + ", you sunk all of " + player1 + "'s battleships!";
+
+                document.getElementById('gameover').play();
+                setTimeout("document.getElementById('p2').play();", 100);
+                setTimeout("document.getElementById('youwin').play();", 3000);
             }
                 //alerts gamers to the end of the game and resets sessionStorage, also routes the game to the setup screen
-                alert(outputString);
+                if(player2!="Bot")
+                {
+                    alert(outputString);
+                }
+                
                 sessionStorage.ExecObj = {};
 
                 //displays end of game message and hides p1 ship map

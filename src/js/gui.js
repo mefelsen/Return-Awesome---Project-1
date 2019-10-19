@@ -95,11 +95,15 @@ function setPlayerNames() {
    if (direction === 1)
    {
      //if it is horizontal
+     let audio = new Audio('src/Sounds/' + numShips + '.ogg');
+     audio.play();
      placeShip(numShips, true, shipId);
    }
    else
    {
      //if it is vertical
+     let audio = new Audio('src/Sounds/' + numShips + '.ogg');
+     audio.play();
      placeShip(numShips, false, shipId);
    }
  }
@@ -246,6 +250,9 @@ function setPlayerNames() {
              if (sizeNum !== 1)
              {
                //while still placing ships, ask for a new orientation after each one is placed
+               let audio = new Audio('src/Sounds/' + (size - 1) + '.ogg');
+               audio.play();
+
                let horizontal;
                if((shipId === "ship1") || (shipId != "ship1" && document.getElementById("AI_selector").value != "bot"))
                {
@@ -470,6 +477,8 @@ function buttonHandler(tableId, coords){
                 for (let j = 0; j<exec.admir2.fleet[i].coords.length; j++)
                 {
                   if (exec.admir2.fleet[i].coords[j] == coords && exec.admir2.afloat != 0) {
+
+                    document.getElementById('shipSunk').play();
                     alert("Congrats! You sunk a ship!");
                   }
                 }
@@ -488,7 +497,12 @@ function buttonHandler(tableId, coords){
                   if (exec.admir1.fleet[i].coords[j] === coords && exec.admir1.afloat != 0) {
                     if(exec.getPlayerTurn() == 2 && exec.admir2.botDifficulty != "0")
                     {
+<<<<<<< HEAD
+                      document.getElementById('shipSunk').play();
                       alert("Bot sunk your ship!");
+=======
+                      //alert("Bot sunk your ship!");
+>>>>>>> 63ae4d732749974286ff5409aca938541b0ed37c
                     }
                     else
                     {
@@ -691,7 +705,7 @@ function turnButton(){
       if (exec.admir2.botDifficulty == "1") {
         let coord = exec.admir2.AIupdateHit("fire1", exec.admir2.botDifficulty);
         buttonHandler("fire1", coord);
-  
+
         if (document.getElementById("message").innerHTML != "has won the game!!!") {
           exec.advancePlayerTurn();
         }
@@ -707,10 +721,10 @@ function turnButton(){
         let i
         let j
         var guess
-  
+
         // let looped=exec.admir1.afloat
         // let ed=looped-1
-  
+
         while(!exec.admir1.gethitstute())
         {
           var looped=exec.admir1.afloat
@@ -720,7 +734,7 @@ function turnButton(){
           guess = i.toString(10) + ":" + j.toString(10);
           buttonHandler("fire1", guess);
         }
-  
+
         if(looped!=ed)
         {
           exec.admir1.savecoord(guess)
@@ -730,8 +744,8 @@ function turnButton(){
           //update
           exec.admir1.updatehitstute()
         }
-        
-  
+
+
         //planB
         // while(looped!=ed)
         // {
@@ -741,9 +755,9 @@ function turnButton(){
         //   buttonHandler("fire1", guess);
         //   looped=exec.admir1.afloat
         // }
-        
-        
-  
+
+
+
         if(document.getElementById("message").innerHTML != "has won the game!!!")
         {
           exec.advancePlayerTurn();
@@ -825,7 +839,7 @@ function rechit(coord)
 {
   let row=parseInt(coord.substr(0,1))
   let col=parseInt(coord.substr(2,1))
-  //going up 
+  //going up
   if(check(row-1))
   {
     let tothecoord= (row-1).toString(10)+":"+col.toString(10)
@@ -845,7 +859,7 @@ function rechit(coord)
     {
       exec.admir1.savecoord(tothecoord)
     }
-   
+
   }
   if(check(col-1))
   {
@@ -856,7 +870,7 @@ function rechit(coord)
     {
       exec.admir1.savecoord(tothecoord)
     }
-  
+
   }
   if(check(col+1))
   {
@@ -867,7 +881,7 @@ function rechit(coord)
     {
       exec.admir1.savecoord(tothecoord)
     }
-   
+
   }
 }
 /**
@@ -987,7 +1001,7 @@ function specialbuttonHandler(tableId, coords){
                   if (exec.admir1.fleet[i].coords[j] === coords && exec.admir1.afloat != 0) {
                     if(exec.getPlayerTurn() == 2 && exec.admir2.botDifficulty != "0")
                     {
-                      alert("Bot sunk your ship!");
+                      //alert("Bot sunk your ship!");
                     }
                     else
                     {
