@@ -666,7 +666,7 @@ function turnButton(){
     else if(temp.value == "Bot Start")
     {//Test
       let coord = exec.admir2.AIupdateHit("fire1",exec.admir2.botDifficulty);
-      buttonHandler("fire1","1:8");
+      buttonHandler("fire1",coord);
       if(document.getElementById("message").innerHTML != "has won the game!!!")
       {
         exec.advancePlayerTurn();
@@ -715,5 +715,29 @@ function turnButton(){
     document.getElementById("player2").disabled = false;
     document.getElementById("player2").style.visibility = "visible";
     document.getElementById("player2").value = "";
+  }
+}
+
+ /**
+ * [Member of gui.js]
+ * Called when Attack button is pressed. Attacks a 3x3 location
+ */
+function specialShot()
+{
+  let j = parseInt(document.getElementById("specialshot_coord_1").value);
+  let i = parseInt(document.getElementById("specialshot_coord_2").value);
+  if(i < 2 || i > 7 || j < 2 || j > 7) {
+    alert("Select a valid location! Your special shot will go out of bounds");
+  }
+  else {
+    buttonHandler("fire1",i.toString() + ":" + j.toString());//middle
+    buttonHandler("fire1",i.toString() + ":" + (j-1).toString());//middle bottom
+    buttonHandler("fire1",i.toString() + ":" + (j+1).toString());//middle top
+    buttonHandler("fire1",(i-1).toString() + ":" + j.toString());//Left middle
+    buttonHandler("fire1",(i+1).toString() + ":" + j.toString());//Right middle
+    buttonHandler("fire1",(i-1).toString() + ":" + (j+1).toString());//Left top
+    buttonHandler("fire1",(i+1).toString() + ":" + (j+1).toString());//Right top
+    buttonHandler("fire1",(i-1).toString() + ":" + (j-1).toString());//Left bottom
+    buttonHandler("fire1",(i+1).toString() + ":" + (j-1).toString());//Right bottom
   }
 }
