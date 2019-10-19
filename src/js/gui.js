@@ -497,12 +497,7 @@ function buttonHandler(tableId, coords){
                   if (exec.admir1.fleet[i].coords[j] === coords && exec.admir1.afloat != 0) {
                     if(exec.getPlayerTurn() == 2 && exec.admir2.botDifficulty != "0")
                     {
-<<<<<<< HEAD
-                      document.getElementById('shipSunk').play();
-                      alert("Bot sunk your ship!");
-=======
-                      //alert("Bot sunk your ship!");
->>>>>>> 63ae4d732749974286ff5409aca938541b0ed37c
+                      //disable alart
                     }
                     else
                     {
