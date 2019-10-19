@@ -22,6 +22,7 @@ class Admiral {
     this.name = pName;
     this.alreadyGuessed = new Array(8);
     this.botDifficulty = isBot;
+    this.aIcoord=""
     for(let i = 0; i <= this.config.BOARD_SIZE; i++){//Make this configurable, should be variable "size" found in Config.js
         this.alreadyGuessed[i] = new Array(8);
         for(let j = 0; j <= this.config.BOARD_SIZE; j++){
@@ -33,7 +34,17 @@ class Admiral {
       this.fleet.push(newShip); //adds the new ship to fleet array
     }
   }
-
+  savecoord(coord)
+  {
+    this.aIcoord=coord
+  }
+  gethitstute(){
+    return this.board.isHit;
+  }
+  updatehitstute()
+  {
+    this.board.isHit=false;
+  }
   /**
    * Get the number of ships.
    * @return {number} the number of ships that the Admiral has.
