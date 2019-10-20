@@ -716,7 +716,7 @@ function turnButton(){
         let i
         let j
         var guess
-
+        let flag=true
         // let looped=exec.admir1.afloat
         // let ed=looped-1
 
@@ -728,9 +728,10 @@ function turnButton(){
           j = Math.floor(Math.random() * 8) + 1;
           guess = i.toString(10) + ":" + j.toString(10);
           buttonHandler("fire1", guess);
+          flag=false
         }
 
-        if(looped!=ed)
+        if(looped!=ed && flag)
         {
           exec.admir1.savecoord(guess)
           rechit(exec.admir1.aIcoord)
@@ -739,7 +740,7 @@ function turnButton(){
           //update
           exec.admir1.updatehitstute()
         }
-
+        flag=true
 
         //planB
         // while(looped!=ed)
