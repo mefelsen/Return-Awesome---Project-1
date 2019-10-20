@@ -6,6 +6,11 @@ let placeholder;
 let p1;
 let p2;
 
+let p1_specialshot_enable = true;
+let p2_specialshot_enable = true;
+let p1_sunk_ship = false;
+let p2_sunk_ship = false;
+
 /**
  * [Member of gui.js]
  * Hides instructions after users start setup.
@@ -90,11 +95,15 @@ function setPlayerNames() {
    if (direction === 1)
    {
      //if it is horizontal
+     let audio = new Audio('src/Sounds/' + numShips + '.ogg');
+     audio.play();
      placeShip(numShips, true, shipId);
    }
    else
    {
      //if it is vertical
+     let audio = new Audio('src/Sounds/' + numShips + '.ogg');
+     audio.play();
      placeShip(numShips, false, shipId);
    }
  }
@@ -127,7 +136,8 @@ function setPlayerNames() {
    {
      if(document.getElementById("AI_selector").value == "bot")
      {
-       document.getElementById("placement").innerHTML = "Press button to randomly place bot ships.";
+       document.getElementById("placement").innerHTML = "Bot placement is happening right now.";
+      // table.rows[i].cells[j]
      }
      else
      {
@@ -135,178 +145,242 @@ function setPlayerNames() {
      }
    }
 
-     let table = document.getElementById(shipId);
+     
 
      //this if is for if player 1 or player 2 but not bot are picking placement for their ships
    //  if(shipId ==="ship1" || (shipId != "ship1" && document.getElementById("AI_selector").value != "bot"))
    //  {
-   //if the table isn't empty, begin to show the user places they can place their ships
-   if (table != null)
-   {
-     for (let i = 0; i < table.rows.length; i++)
+   //if the table isn't empty, begin to show the user places they can place their ships////////////////////////////////////////////////////////////////////////////////////////////
+    if(shipId==2 && document.getElementById("AI_selector").value == "bot") //this will handle bot placement
+    {
+      
+        //hide the ship board
+        document.getElementById(shipId).style.display = "none";
+       
+          document.getElementById("test").style.display = "none";
+          document.getElementById("ships").style.display = "none";
+          document.getElementById("names").style.display = "none";
+          document.getElementById("placement").style.display = "none";
+          // alert("Press ok to start the game");
+          // exec.advancePlayerTurn();
+          // storeExecObj(tempObj);
+        
+     let sizeNum = Number(size);
+     horizontal = Math.floor(Math.random() * 2)+1;
+     let i = Math.floor(Math.random() * 8)+1;
+     let j = Math.floor(Math.random() * 8)+1;
+     let tempCoords = (i) + ":" + (j);
+     buttonHandlerSetup(shipId, tempCoords, size, horizontal);
+
+     if (horizontal)
      {
-       for (let j = 0; j < table.rows[i].cells.length; j++)
-       {
-         table.rows[i].cells[j].style.cursor = "ptr";
-
-         //adds color for potenial cell when mouse over a cell -- yellow = legal, red = illegal
-         table.rows[i].cells[j].onmousemove = changeColor(size, horizontal, "yellow", shipId);
-
-         //removes the red and yellow when you move the mouse to point somewhere else
-         table.rows[i].cells[j].onmouseout = function()
-         {
-           if (horizontal)
-           {
-             if (j + size <= 8)  //if the potential ship did not go out of bounds
-             {
-               for (let count = 0; count < size; count++)
-               {
-                 if (table.rows[i].cells[j + count].innerHTML != "") //if there is no ship already there
-                   table.rows[i].cells[j + count].style.backgroundColor = "lightblue"; //turn it back to water
-                 else
-                   table.rows[i].cells[j + count].style.backgroundColor = "grey";
-               }
-             }
-             else
-             {
-               //change the color back to what it for the rest of the row that the ship was in
-               let count = 0;
-               while (count + j < 8)
-               {
-                 if (table.rows[i].cells[j + count].innerHTML != "") //if no ship already placed
-                   table.rows[i].cells[j + count].style.backgroundColor = "lightblue"; //back to water
-                 else
-                   table.rows[i].cells[j + count].style.backgroundColor = "grey";
-                 count++;
-               }
-             }
-           }
-           else //if the ship outline was vertical
-           {
-             if (i + size <= 8) //if the ship doesn't go off the board
-             {
-               for (let count = 0; count < size; count++)
-               {
-                 if (table.rows[i + count].cells[j].innerHTML != "") //if not an existing ship
-                   table.rows[i + count].cells[j].style.backgroundColor ="lightblue"; //back to water
-                 else
-                   table.rows[i + count].cells[j].style.backgroundColor = "grey";
-               }
-             }
-             else //if the ship goes off the bounds of the board
-             {
-               let count = 0;
-               //avoids going out of bounds in table
-               while (count + i < 8)
-               {
-                 if (table.rows[i + count].cells[j].innerHTML != "")
-                   table.rows[i + count].cells[j].style.backgroundColor =  "lightblue";
-                 else
-                   table.rows[i + count].cells[j].style.backgroundColor = "grey";
-                 count++;
-               }
-             }
-           }
-         };
-
-         //if the user clicks to place the ship
-         //need to copy, edit, and paste this for bot on click after player1 sets all of his ships.
-         table.rows[i].cells[j].onclick = function()
-         {
-           let sizeNum = Number(size);
-
-           //sending the coords and tableId for ship construction
-           if (isLegal(table.rows[i].cells[j])) {
-             let tempCoords = (i+1) + ":" + (j+1);
-             buttonHandlerSetup(shipId, tempCoords, size, horizontal);
-
-             if (horizontal)
-             {
-               if (j + sizeNum <= 8) {
-                 for (let count = 0; count < sizeNum; count++) {
-                   table.rows[i].cells[j + count].style.backgroundColor = "grey";
-                   table.rows[i].cells[j + count].innerHTML = "";
-                 }
-               }
-             }
-             else
-             {
-               if (i + sizeNum <= 8) {
-                 for (let count = 0; count < sizeNum; count++) {
-                   table.rows[i + count].cells[j].style.backgroundColor = "grey";
-                   table.rows[i + count].cells[j].innerHTML = "";
-                 }
-               }
-             }
-             if (sizeNum !== 1)
-             {
-               //while still placing ships, ask for a new orientation after each one is placed
-               let horizontal;
-               if((shipId === "ship1") || (shipId != "ship1" && document.getElementById("AI_selector").value != "bot"))
-               {
-                 horizontal = prompt("Now please choose an orientation for this ship. Type 1 for horizontal or 2 for vertical");
-               }
-               else
-               {
-                 horizontal = Math.floor(Math.random() * 2)+1;
-               }
-               //validate the input
-               while (horizontal < 1 || horizontal > 2 || horizontal % 1 != 0 || horizontal === null )
-               {
-                 horizontal = prompt("Type 1 for horizontal or 2 for vertical");
-               }
-               horizontal = Number(horizontal);
-               if (horizontal === 1)
-               {
-                 //call the placeship function for the next smallest ship
-                 placeShip(sizeNum-1, true, shipId);
-               }
-               else
-               {
-                 //call the placeship function for the next smallest ship
-                 placeShip(sizeNum -1, false, shipId);
-               }
-             }
-             else
-             {
-               //hide the ship board
-               document.getElementById(shipId).style.display = "none";
-               if (shipId === "ship1")
-               {
-                 //player 1 just finished, hide their board and display player 2's
-                 document.getElementById("test").style.display = "block";
-                 document.getElementById("ships").style.display = "none";
-                 document.getElementById("names").style.display = "none";
-                 document.getElementById("placement").style.display = "none";
-                 document.getElementById("button1").style.display = "none";
-                 if(document.getElementById("AI_selector").value == "bot")
-                 {
-                   alert("You have placed all of your ships.")
-                 }
-                 else
-                 {
-                   alert("You have placed all of your ships. Please switch players now!");
-                 }
-                 exec.advancePlayerTurn();
-               }
-               else
-               {
-                 //player 1 and player 2 have no finished. Moving to start the game
-                 document.getElementById("test").style.display = "none";
-                 document.getElementById("ships").style.display = "none";
-                 document.getElementById("names").style.display = "none";
-                 document.getElementById("placement").style.display = "none";
-                 alert("Press ok to start the game");
-                 exec.advancePlayerTurn();
-                 storeExecObj(tempObj);
-               }
-             }
-           }
-         }; //end of onclick function
-       //}
+       if (j + sizeNum <= 8) {
+         for (let count = 0; count < sizeNum; count++) {
+           table.rows[i].cells[j + count].style.backgroundColor = "grey";
+           table.rows[i].cells[j + count].innerHTML = "";
+         }
        }
+      // placeShip(sizeNum-1, false, shipId);
      }
-   }
+     else
+     {
+       if (i + sizeNum <= 8) {
+         for (let count = 0; count < sizeNum; count++) {
+           table.rows[i + count].cells[j].style.backgroundColor = "grey";
+           table.rows[i + count].cells[j].innerHTML = "";
+         }
+       }
+      // placeShip(sizeNum-1, true, shipId);
+     } if (sizeNum !== 1)
+     {
+       //while still placing ships, ask for a new orientation after each one is placed
+       let audio = new Audio('src/Sounds/' + (size - 1) + '.ogg');
+       audio.play();
+
+       
+         placeShip(sizeNum -1, false, shipId);
+      
+      }     
+      else
+    {alert("Bot Placement Done. Press ok to start the game");
+    exec.advancePlayerTurn();
+    storeExecObj(tempObj);}
+    
+     }
+   else
+   { 
+    let table = document.getElementById(shipId);
+    if (table != null)
+      {
+        for (let i = 0; i < table.rows.length; i++)
+        {
+          for (let j = 0; j < table.rows[i].cells.length; j++)
+          {
+            table.rows[i].cells[j].style.cursor = "ptr";
+
+            //adds color for potenial cell when mouse over a cell -- yellow = legal, red = illegal
+            table.rows[i].cells[j].onmousemove = changeColor(size, horizontal, "yellow", shipId);
+
+            //removes the red and yellow when you move the mouse to point somewhere else
+            table.rows[i].cells[j].onmouseout = function()
+            {
+              if (horizontal)
+              {
+                if (j + size <= 8)  //if the potential ship did not go out of bounds
+                {
+                  for (let count = 0; count < size; count++)
+                  {
+                    if (table.rows[i].cells[j + count].innerHTML != "") //if there is no ship already there
+                      table.rows[i].cells[j + count].style.backgroundColor = "lightblue"; //turn it back to water
+                    else
+                      table.rows[i].cells[j + count].style.backgroundColor = "grey";
+                  }
+                }
+                else
+                {
+                  //change the color back to what it for the rest of the row that the ship was in
+                  let count = 0;
+                  while (count + j < 8)
+                  {
+                    if (table.rows[i].cells[j + count].innerHTML != "") //if no ship already placed
+                      table.rows[i].cells[j + count].style.backgroundColor = "lightblue"; //back to water
+                    else
+                      table.rows[i].cells[j + count].style.backgroundColor = "grey";
+                    count++;
+                  }
+                }
+              }
+              else //if the ship outline was vertical
+              {
+                if (i + size <= 8) //if the ship doesn't go off the board
+                {
+                  for (let count = 0; count < size; count++)
+                  {
+                    if (table.rows[i + count].cells[j].innerHTML != "") //if not an existing ship
+                      table.rows[i + count].cells[j].style.backgroundColor ="lightblue"; //back to water
+                    else
+                      table.rows[i + count].cells[j].style.backgroundColor = "grey";
+                  }
+                }
+                else //if the ship goes off the bounds of the board
+                {
+                  let count = 0;
+                  //avoids going out of bounds in table
+                  while (count + i < 8)
+                  {
+                    if (table.rows[i + count].cells[j].innerHTML != "")
+                      table.rows[i + count].cells[j].style.backgroundColor =  "lightblue";
+                    else
+                      table.rows[i + count].cells[j].style.backgroundColor = "grey";
+                    count++;
+                  }
+                }
+              }
+            };
+
+            //if the user clicks to place the ship
+            //need to copy, edit, and paste this for bot on click after player1 sets all of his ships.
+            table.rows[i].cells[j].onclick = function()
+            {
+              let sizeNum = Number(size);
+
+              //sending the coords and tableId for ship construction
+              if (isLegal(table.rows[i].cells[j])) {
+                let tempCoords = (i+1) + ":" + (j+1);
+                buttonHandlerSetup(shipId, tempCoords, size, horizontal);
+
+                if (horizontal)
+                {
+                  if (j + sizeNum <= 8) {
+                    for (let count = 0; count < sizeNum; count++) {
+                      table.rows[i].cells[j + count].style.backgroundColor = "grey";
+                      table.rows[i].cells[j + count].innerHTML = "";
+                    }
+                  }
+                }
+                else
+                {
+                  if (i + sizeNum <= 8) {
+                    for (let count = 0; count < sizeNum; count++) {
+                      table.rows[i + count].cells[j].style.backgroundColor = "grey";
+                      table.rows[i + count].cells[j].innerHTML = "";
+                    }
+                  }
+                }
+                if (sizeNum !== 1)
+                {
+                  //while still placing ships, ask for a new orientation after each one is placed
+                  let audio = new Audio('src/Sounds/' + (size - 1) + '.ogg');
+                  audio.play();
+
+                  let horizontal;
+                  if((shipId === "ship1") || (shipId != "ship1" && document.getElementById("AI_selector").value != "bot"))
+                  {
+                    horizontal = prompt("Now please choose an orientation for this ship. Type 1 for horizontal or 2 for vertical");
+                  }
+                  else
+                  {
+                    horizontal = Math.floor(Math.random() * 2)+1;
+                    
+                  }
+                  //validate the input
+                  while (horizontal < 1 || horizontal > 2 || horizontal % 1 != 0 || horizontal === null )
+                  {
+                    horizontal = prompt("Type 1 for horizontal or 2 for vertical");
+                  }
+                  horizontal = Number(horizontal);
+                  if (horizontal === 1)
+                  {
+                    //call the placeship function for the next smallest ship
+                    placeShip(sizeNum-1, true, shipId);
+                  }
+                  else
+                  {
+                    //call the placeship function for the next smallest ship
+                    placeShip(sizeNum -1, false, shipId);
+                  }
+                }
+                else
+                {
+                  //hide the ship board
+                  document.getElementById(shipId).style.display = "none";
+                  if (shipId === "ship1")
+                  {
+                    //player 1 just finished, hide their board and display player 2's
+                    document.getElementById("test").style.display = "block";
+                    document.getElementById("ships").style.display = "none";
+                    document.getElementById("names").style.display = "none";
+                    document.getElementById("placement").style.display = "none";
+                    document.getElementById("button1").style.display = "none";
+                    if(document.getElementById("AI_selector").value == "bot")
+                    {
+                      alert("You have placed all of your ships.")
+                    }
+                    else
+                    {
+                      alert("You have placed all of your ships. Please switch players now!");
+                    }
+                    exec.advancePlayerTurn();
+                  }
+                  else
+                  {
+                    //player 1 and player 2 have no finished. Moving to start the game
+                    document.getElementById("test").style.display = "none";
+                    document.getElementById("ships").style.display = "none";
+                    document.getElementById("names").style.display = "none";
+                    document.getElementById("placement").style.display = "none";
+                    alert("Press ok to start the game");
+                    exec.advancePlayerTurn();
+                    storeExecObj(tempObj);
+                  }
+                }
+              }
+            }; //end of onclick function
+          //}
+          }
+        }
+      }
+    }
 
      //this else is for the bot random placement without clicks, not coded, so bot can't randomly place.
      /*else
@@ -465,6 +539,8 @@ function buttonHandler(tableId, coords){
                 for (let j = 0; j<exec.admir2.fleet[i].coords.length; j++)
                 {
                   if (exec.admir2.fleet[i].coords[j] == coords && exec.admir2.afloat != 0) {
+
+                    document.getElementById('shipSunk').play();
                     alert("Congrats! You sunk a ship!");
                   }
                 }
@@ -483,7 +559,7 @@ function buttonHandler(tableId, coords){
                   if (exec.admir1.fleet[i].coords[j] === coords && exec.admir1.afloat != 0) {
                     if(exec.getPlayerTurn() == 2 && exec.admir2.botDifficulty != "0")
                     {
-                      alert("Bot sunk your ship!");
+                      //disable alart
                     }
                     else
                     {
@@ -499,6 +575,14 @@ function buttonHandler(tableId, coords){
     else{
         alert("You shouldn't fire on your own map!");
     }
+    document.getElementById("specialshot").style = "display: inline; visibility: hidden;";
+    document.getElementById("specialshot").disabled = "true";
+    document.getElementById("specialshot_button").style = "display: inline; visibility: hidden;";
+    document.getElementById("specialshot_button").disabled = "true";
+    document.getElementById("specialshot_form1").style = "display: inline; visibility: hidden;";
+    document.getElementById("specialshot_form1").disabled = "true";
+    document.getElementById("specialshot_form2").style = "display: inline; visibility: hidden;";
+    document.getElementById("specialshot_form2").disabled = "true";
 }
 
 /**
@@ -650,6 +734,15 @@ function turnButton(){
         document.getElementById("p2updates").style.display = "none";
         document.getElementById("p1progress").style.display = "none";
         document.getElementById("p2progress").style.display = "none";
+        //hide special shot elements
+        document.getElementById("specialshot").style = "display: inline; visibility: hidden;";
+        document.getElementById("specialshot").disabled = "true";
+        document.getElementById("specialshot_button").style = "display: inline; visibility: hidden;";
+        document.getElementById("specialshot_button").disabled = "true";
+        document.getElementById("specialshot_form1").style = "display: inline; visibility: hidden;";
+        document.getElementById("specialshot_form1").disabled = "true";
+        document.getElementById("specialshot_form2").style = "display: inline; visibility: hidden;";
+        document.getElementById("specialshot_form2").disabled = "true";
         //update home button text to next value
         if(exec.admir2.botDifficulty == "0")
         {
@@ -660,21 +753,82 @@ function turnButton(){
           temp.value = "Bot Start";
         }
         exec.advancePlayerTurn();
+        //exec.advancePlayerTurn(); <-- for future use
         exec.refreshMap();
         exec.refreshFireMap();
     }
     else if(temp.value == "Bot Start")
     {//Test
-      let coord;
-      if(exec.admir2.botDifficulty ==3)
-      {
-        coord = exec.admir1.returnVal();
+      if (exec.admir2.botDifficulty == "1") {
+        let coord = exec.admir2.AIupdateHit();
+        buttonHandler("fire1", coord);
+
+        // if (document.getElementById("message").innerHTML != "has won the game!!!") {
+        //   exec.advancePlayerTurn();
+        // }
+        // exec.refreshMap();
+        // exec.refreshFireMap();
+        // temp.value = "Player Start";
       }
-      else coord = exec.admir2.AIupdateHit("fire1",exec.admir2.botDifficulty);
-   
-      buttonHandler("fire1",coord);
-      if(document.getElementById("message").innerHTML != "has won the game!!!")
-      {
+      else if (exec.admir2.botDifficulty == "2") {
+        //part planB
+        // let i = Math.floor(Math.random() * 8) + 1;
+        // let j = Math.floor(Math.random() * 8) + 1;
+        // let guess = i.toString(10) + ":" + j.toString(10);
+        let i
+        let j
+        var guess
+        let flag=true
+        // let looped=exec.admir1.afloat
+        // let ed=looped-1
+
+        while(!exec.admir1.gethitstute())
+        {
+          var looped=exec.admir1.afloat
+          var ed=looped-1
+          i = Math.floor(Math.random() * 8) + 1;
+          j = Math.floor(Math.random() * 8) + 1;
+          guess = i.toString(10) + ":" + j.toString(10);
+          buttonHandler("fire1", guess);
+          flag=false
+        }
+
+        if(looped!=ed && flag)
+        {
+          exec.admir1.savecoord(guess)
+          rechit(exec.admir1.aIcoord)
+        }else
+        {
+          //update
+          exec.admir1.updatehitstute()
+        }
+        flag=true
+
+        //planB
+        // while(looped!=ed)
+        // {
+        //   i = Math.floor(Math.random() * 8) + 1;
+        //   j = Math.floor(Math.random() * 8) + 1;
+        //   guess = i.toString(10) + ":" + j.toString(10);
+        //   buttonHandler("fire1", guess);
+        //   looped=exec.admir1.afloat
+        // }
+
+
+
+        // if(document.getElementById("message").innerHTML != "has won the game!!!")
+        // {
+        //   exec.advancePlayerTurn();
+        // }
+        // exec.refreshMap();
+        // exec.refreshFireMap();
+        // temp.value = "Player Start";
+      }
+      else if (exec.admir2.botDifficulty == "3") {
+      let coord = exec.admir1.returnVal();
+      buttonHandler("fire1", coord);
+      }
+      if (document.getElementById("message").innerHTML != "has won the game!!!") {
         exec.advancePlayerTurn();
       }
       exec.refreshMap();
@@ -695,9 +849,109 @@ function turnButton(){
         temp.value = "End Turn";
         //disable button
         temp.disabled = true;
+
+        if(p1_specialshot_enable && exec.getPlayerTurn() == 1) {
+          document.getElementById("specialshot").style = "display: inline;";
+          document.getElementById("specialshot").disabled = false;
+          document.getElementById("specialshot_button").style = "display: inline;";
+          document.getElementById("specialshot_button").disabled = false;
+          document.getElementById("specialshot_form1").style = "display: inline;";
+          document.getElementById("specialshot_form1").disabled = false;
+          document.getElementById("specialshot_form2").style = "display: inline;";
+          document.getElementById("specialshot_form2").disabled = false;
+        }
+        if(p2_specialshot_enable && exec.getPlayerTurn() == 2) {
+          document.getElementById("specialshot").style = "display: inline;";
+          document.getElementById("specialshot").disabled = false;
+          document.getElementById("specialshot_button").style = "display: inline;";
+          document.getElementById("specialshot_button").disabled = false;
+          document.getElementById("specialshot_form1").style = "display: inline;";
+          document.getElementById("specialshot_form1").disabled = false;
+          document.getElementById("specialshot_form2").style = "display: inline;";
+          document.getElementById("specialshot_form2").disabled = false;
+        }
+        if(!p1_specialshot_enable && exec.getPlayerTurn() == 1) {
+          document.getElementById("specialshot").style = "display: inline; visibility: hidden;";
+          document.getElementById("specialshot").disabled = "true";
+          document.getElementById("specialshot_button").style = "display: inline; visibility: hidden;";
+          document.getElementById("specialshot_button").disabled = "true";
+          document.getElementById("specialshot_form1").style = "display: inline; visibility: hidden;";
+          document.getElementById("specialshot_form1").disabled = "true";
+          document.getElementById("specialshot_form2").style = "display: inline; visibility: hidden;";
+          document.getElementById("specialshot_form2").disabled = "true";
+        }
+        if(!p2_specialshot_enable && exec.getPlayerTurn() == 2) {
+          document.getElementById("specialshot").style = "display: inline; visibility: hidden;";
+          document.getElementById("specialshot").disabled = "true";
+          document.getElementById("specialshot_button").style = "display: inline; visibility: hidden;";
+          document.getElementById("specialshot_button").disabled = "true";
+          document.getElementById("specialshot_form1").style = "display: inline; visibility: hidden;";
+          document.getElementById("specialshot_form1").disabled = "true";
+          document.getElementById("specialshot_form2").style = "display: inline; visibility: hidden;";
+          document.getElementById("specialshot_form2").disabled = "true";
+        }
     }
 }
+function check(x)
+{
+  if(x>0&&x<9)
+  {
+    return true
+  }
+  else
+  {
+    return false
+  }
+}
+function rechit(coord)
+{
+  let row=parseInt(coord.substr(0,1))
+  let col=parseInt(coord.substr(2,1))
+  //going up
+  if(check(row-1))
+  {
+    let tothecoord= (row-1).toString(10)+":"+col.toString(10)
+    //exec.admir1.updatehitstute()
+    buttonHandler("fire1", tothecoord);
+    if(exec.admir1.gethitstute())
+    {
+      exec.admir1.savecoord(tothecoord)
+    }
+  }
+  if(check(row+1))
+  {
+    let tothecoord= (row+1).toString(10)+":"+col.toString(10)
+    //exec.admir1.updatehitstute()
+    buttonHandler("fire1", tothecoord);
+    if(exec.admir1.gethitstute())
+    {
+      exec.admir1.savecoord(tothecoord)
+    }
 
+  }
+  if(check(col-1))
+  {
+    let tothecoord= row.toString(10)+":"+(col-1).toString(10)
+    //exec.admir1.updatehitstute()
+    buttonHandler("fire1", tothecoord);
+    if(exec.admir1.gethitstute())
+    {
+      exec.admir1.savecoord(tothecoord)
+    }
+
+  }
+  if(check(col+1))
+  {
+    let tothecoord= row.toString(10)+":"+(col+1).toString(10)
+    //exec.admir1.updatehitstute()
+    buttonHandler("fire1", tothecoord);
+    if(exec.admir1.gethitstute())
+    {
+      exec.admir1.savecoord(tothecoord)
+    }
+
+  }
+}
 /**
  * [Member of gui.js]
  * Changes GUI labels and select forms based on playing against another player or AI
@@ -736,14 +990,99 @@ function specialShot()
     alert("Select a valid location! Your special shot will go out of bounds");
   }
   else {
-    buttonHandler("fire1",i.toString() + ":" + j.toString());//middle
-    buttonHandler("fire1",i.toString() + ":" + (j-1).toString());//middle bottom
-    buttonHandler("fire1",i.toString() + ":" + (j+1).toString());//middle top
-    buttonHandler("fire1",(i-1).toString() + ":" + j.toString());//Left middle
-    buttonHandler("fire1",(i+1).toString() + ":" + j.toString());//Right middle
-    buttonHandler("fire1",(i-1).toString() + ":" + (j+1).toString());//Left top
-    buttonHandler("fire1",(i+1).toString() + ":" + (j+1).toString());//Right top
-    buttonHandler("fire1",(i-1).toString() + ":" + (j-1).toString());//Left bottom
-    buttonHandler("fire1",(i+1).toString() + ":" + (j-1).toString());//Right bottom
+    specialbuttonHandler("fire1",i.toString() + ":" + j.toString());//middle
+    specialbuttonHandler("fire1",i.toString() + ":" + (j-1).toString());//middle bottom
+    specialbuttonHandler("fire1",i.toString() + ":" + (j+1).toString());//middle top
+    specialbuttonHandler("fire1",(i-1).toString() + ":" + j.toString());//Left middle
+    specialbuttonHandler("fire1",(i+1).toString() + ":" + j.toString());//Right middle
+    specialbuttonHandler("fire1",(i-1).toString() + ":" + (j+1).toString());//Left top
+    specialbuttonHandler("fire1",(i+1).toString() + ":" + (j+1).toString());//Right top
+    specialbuttonHandler("fire1",(i-1).toString() + ":" + (j-1).toString());//Left bottom
+    specialbuttonHandler("fire1",(i+1).toString() + ":" + (j-1).toString());//Right bottom
+
+    //Disable all controls after shot is used
+    document.getElementById("specialshot").style = "display: inline; visibility: hidden;";
+    document.getElementById("specialshot").disabled = "true";
+    document.getElementById("specialshot_button").style = "display: inline; visibility: hidden;";
+    document.getElementById("specialshot_button").disabled = "true";
+    document.getElementById("specialshot_form1").style = "display: inline; visibility: hidden;";
+    document.getElementById("specialshot_form1").disabled = "true";
+    document.getElementById("specialshot_form2").style = "display: inline; visibility: hidden;";
+    document.getElementById("specialshot_form2").disabled = "true";
+
+    if(exec.getPlayerTurn() == 1) {
+      p1_specialshot_enable = false;
+      if(p1_sunk_ship) {
+        alert("Congrats! You sunk a ship");
+      }
+      exec.endGameChecker(1);
+    }
+    else {
+      p2_specialshot_enable = false;
+      if(p2_sunk_ship) {
+        alert("Congrats! You sunk a ship");
+      }
+      exec.endGameChecker(2);
+    }
   }
+}
+
+/**
+ * [Member of gui.js]
+ * A altered version of buttonhandler. Specifically for special shot.
+ * Returns a bool is a ship was sunk or not after a special shot attack.
+ * {@link Exec#updateTable} to update the firing map, and enables the "next turn" button.
+ * @param {string} tableId - id of the table that triggered the onclick event.
+ * @param {string} coords - coordinates for a specific cell in the table.
+ */
+function specialbuttonHandler(tableId, coords){
+    if(tableId == "fire1"){
+        let hit = exec.specialupdateTable(coords, tableId);
+        document.getElementById("table1").classList.add("disabledButton");
+        document.getElementById("turnButton").disabled = false;
+        //exec.checkSunk();
+        if(exec.getPlayerTurn()===1)
+        {
+          document.getElementById("p1progress").style.display = "block";
+          for (let i = 0; i< exec.admir2.numShips; i++)
+          {
+            if (exec.admir2.fleet[i].status === false)
+            {
+                for (let j = 0; j<exec.admir2.fleet[i].coords.length; j++)
+                {
+                  if (exec.admir2.fleet[i].coords[j] == coords && exec.admir2.afloat != 0) {
+                    p1_sunk_ship = true;
+                  }
+                }
+            }
+          }
+        }
+        else
+        {
+          document.getElementById("p2progress").style.display = "block";
+          for (let i = 0; i< exec.admir1.numShips; i++)
+          {
+            if (exec.admir1.fleet[i].status === false)
+            {
+                for (let j = 0; j<exec.admir1.fleet[i].coords.length; j++)
+                {
+                  if (exec.admir1.fleet[i].coords[j] === coords && exec.admir1.afloat != 0) {
+                    if(exec.getPlayerTurn() == 2 && exec.admir2.botDifficulty != "0")
+                    {
+                      //alert("Bot sunk your ship!");
+                    }
+                    else
+                    {
+                      p2_sunk_ship = true;
+                    }
+                  }
+                }
+            }
+          }
+
+        }
+    }
+    else{
+        alert("You shouldn't fire on your own map!");
+    }
 }
