@@ -109,7 +109,7 @@ function setPlayerNames() {
   * This function deals with the interface for placing ships. When the mouse hovers,
   * the cells that would be occupied by the ship change color depending on if a ship can be placed there.
   * Lets p1 place all their ships before hiding the map and prompting p2 to place their ships.
-  * @param {int} size - the size of the ship being placed.
+  * @param {int} size - the  of the ship being placed.
   * @param {boolean} horizontal - the orientation of the ship: true if the ship is horizontal, false if vertical.
   * @param {string} shipId - the html id for the ship map being used.
   */
@@ -120,6 +120,7 @@ function setPlayerNames() {
    {
      return 0;
    }
+
    //display the text and tables relevant to the player
    document.getElementById("ships").style.display = "block";
    document.getElementById("placement").style.display = "block";
@@ -143,8 +144,8 @@ function setPlayerNames() {
      let table = document.getElementById(shipId);
 
      //this if is for if player 1 or player 2 but not bot are picking placement for their ships
-   //  if(shipId ==="ship1" || (shipId != "ship1" && document.getElementById("AI_selector").value != "bot"))
-   //  {
+    // if(shipId ==="ship1" || (shipId != "ship1" && document.getElementById("AI_selector").value != "bot"))
+    // {
    //if the table isn't empty, begin to show the user places they can place their ships
    if (table != null)
    {
@@ -216,98 +217,150 @@ function setPlayerNames() {
 
          //if the user clicks to place the ship
          //need to copy, edit, and paste this for bot on click after player1 sets all of his ships.
-         table.rows[i].cells[j].onclick = function()
+         if(shipId ==="ship1" || (shipId != "ship1" && document.getElementById("AI_selector").value != "bot"))
          {
-           let sizeNum = Number(size);
+           table.rows[i].cells[j].onclick = function()
+           {
+             let sizeNum = Number(size);
 
-           //sending the coords and tableId for ship construction
-           if (isLegal(table.rows[i].cells[j])) {
-             let tempCoords = (i+1) + ":" + (j+1);
-             buttonHandlerSetup(shipId, tempCoords, size, horizontal);
+             //sending the coords and tableId for ship construction
+             if (isLegal(table.rows[i].cells[j])) {
+               let tempCoords = (i+1) + ":" + (j+1);
+               buttonHandlerSetup(shipId, tempCoords, size, horizontal);
 
-             if (horizontal)
-             {
-               if (j + sizeNum <= 8) {
-                 for (let count = 0; count < sizeNum; count++) {
-                   table.rows[i].cells[j + count].style.backgroundColor = "grey";
-                   table.rows[i].cells[j + count].innerHTML = "";
-                 }
-               }
-             }
-             else
-             {
-               if (i + sizeNum <= 8) {
-                 for (let count = 0; count < sizeNum; count++) {
-                   table.rows[i + count].cells[j].style.backgroundColor = "grey";
-                   table.rows[i + count].cells[j].innerHTML = "";
-                 }
-               }
-             }
-             if (sizeNum !== 1)
-             {
-               //while still placing ships, ask for a new orientation after each one is placed
-               let horizontal;
-               if((shipId === "ship1") || (shipId != "ship1" && document.getElementById("AI_selector").value != "bot"))
+               if (horizontal)
                {
-                 horizontal = prompt("Now please choose an orientation for this ship. Type 1 for horizontal or 2 for vertical");
+                 if (j + sizeNum <= 8) {
+                   for (let count = 0; count < sizeNum; count++) {
+                     table.rows[i].cells[j + count].style.backgroundColor = "grey";
+                     table.rows[i].cells[j + count].innerHTML = "";
+                   }
+                 }
                }
                else
                {
-                 horizontal = Math.floor(Math.random() * 2)+1;
+                 if (i + sizeNum <= 8) {
+                   for (let count = 0; count < sizeNum; count++) {
+                     table.rows[i + count].cells[j].style.backgroundColor = "grey";
+                     table.rows[i + count].cells[j].innerHTML = "";
+                   }
+                 }
                }
-               //validate the input
-               while (horizontal < 1 || horizontal > 2 || horizontal % 1 != 0 || horizontal === null )
+               if (sizeNum !== 1)
                {
-                 horizontal = prompt("Type 1 for horizontal or 2 for vertical");
-               }
-               horizontal = Number(horizontal);
-               if (horizontal === 1)
-               {
-                 //call the placeship function for the next smallest ship
-                 placeShip(sizeNum-1, true, shipId);
-               }
-               else
-               {
-                 //call the placeship function for the next smallest ship
-                 placeShip(sizeNum -1, false, shipId);
-               }
-             }
-             else
-             {
-               //hide the ship board
-               document.getElementById(shipId).style.display = "none";
-               if (shipId === "ship1")
-               {
-                 //player 1 just finished, hide their board and display player 2's
-                 document.getElementById("test").style.display = "block";
-                 document.getElementById("ships").style.display = "none";
-                 document.getElementById("names").style.display = "none";
-                 document.getElementById("placement").style.display = "none";
-                 document.getElementById("button1").style.display = "none";
-                 if(document.getElementById("AI_selector").value == "bot")
+                 //while still placing ships, ask for a new orientation after each one is placed
+                 let horizontal;
+                 if((shipId === "ship1") || (shipId != "ship1" && document.getElementById("AI_selector").value != "bot"))
                  {
-                   alert("You have placed all of your ships.")
+                   horizontal = prompt("Now please choose an orientation for this ship. Type 1 for horizontal or 2 for vertical");
                  }
                  else
                  {
-                   alert("You have placed all of your ships. Please switch players now!");
+                   horizontal = Math.floor(Math.random() * 2)+1;
                  }
-                 exec.advancePlayerTurn();
+                 //validate the input
+                 while (horizontal < 1 || horizontal > 2 || horizontal % 1 != 0 || horizontal === null )
+                 {
+                   horizontal = prompt("Type 1 for horizontal or 2 for vertical");
+                 }
+                 horizontal = Number(horizontal);
+                 if (horizontal === 1)
+                 {
+                   //call the placeship function for the next smallest ship
+                   placeShip(sizeNum-1, true, shipId);
+                 }
+                 else
+                 {
+                   //call the placeship function for the next smallest ship
+                   placeShip(sizeNum -1, false, shipId);
+                 }
                }
                else
                {
-                 //player 1 and player 2 have no finished. Moving to start the game
-                 document.getElementById("test").style.display = "none";
-                 document.getElementById("ships").style.display = "none";
-                 document.getElementById("names").style.display = "none";
-                 document.getElementById("placement").style.display = "none";
-                 alert("Press ok to start the game");
-                 exec.advancePlayerTurn();
-                 storeExecObj(tempObj);
+                 //hide the ship board
+                 document.getElementById(shipId).style.display = "none";
+                 if (shipId === "ship1")
+                 {
+                   //player 1 just finished, hide their board and display player 2's
+                   document.getElementById("test").style.display = "block";
+                   document.getElementById("ships").style.display = "none";
+                   document.getElementById("names").style.display = "none";
+                   document.getElementById("placement").style.display = "none";
+                   document.getElementById("button1").style.display = "none";
+                   if(document.getElementById("AI_selector").value == "bot")
+                   {
+                     alert("You have placed all of your ships.")
+                   }
+                   else
+                   {
+                     alert("You have placed all of your ships. Please switch players now!");
+                   }
+                   exec.advancePlayerTurn();
+                 }
+                 else if((shipId === "ship1") || (shipId != "ship1" && document.getElementById("AI_selector").value != "bot"))
+                 {
+                   //player 1 and player 2 have no finished. Moving to start the game
+                   document.getElementById("test").style.display = "none";
+                   document.getElementById("ships").style.display = "none";
+                   document.getElementById("names").style.display = "none";
+                   document.getElementById("placement").style.display = "none";
+                   alert("Press ok to start the game");
+                   exec.advancePlayerTurn();
+                   storeExecObj(tempObj);
+                 }
+               }
+             }
+           }; //end of onclick function
+         }
+         else
+         {
+           document.getElementById(shipId).style.display = "none";
+           let coord = exec.admir2.AIplace(shipId,exec.admir2.botDifficulty);
+           let sizeNum = Number(size);
+           buttonHandlerSetup(shipId, coord, size, horizontal);
+           if (horizontal)
+           {
+             if (j + sizeNum <= 8) {
+               for (let count = 0; count < sizeNum; count++) {
+                 table.rows[i].cells[j + count].style.backgroundColor = "grey";
+                 table.rows[i].cells[j + count].innerHTML = "";
                }
              }
            }
-         }; //end of onclick function
+           else
+           {
+             if (i + sizeNum <= 8) {
+               for (let count = 0; count < sizeNum; count++) {
+                 table.rows[i + count].cells[j].style.backgroundColor = "grey";
+                 table.rows[i + count].cells[j].innerHTML = "";
+               }
+             }
+           }
+           if(sizeNum !== 1)
+           {
+             let horizontal = Math.floor(Math.random() * 2)+1;
+             if (horizontal === 1)
+             {
+               //call the placeship function for the next smallest ship
+               placeShip(sizeNum-1, true, shipId);
+             }
+             else
+             {
+               //call the placeship function for the next smallest ship
+               placeShip(sizeNum-1, false, shipId);
+             }
+           }
+           else
+           {
+             document.getElementById("test").style.display = "none";
+             document.getElementById("ships").style.display = "none";
+             document.getElementById("names").style.display = "none";
+             document.getElementById("placement").style.display = "none";
+             exec.advancePlayerTurn();
+             storeExecObj(tempObj);
+           }
+         }
+
        //}
        }
      }
@@ -315,17 +368,33 @@ function setPlayerNames() {
 
      //this else is for the bot random placement without clicks, not coded, so bot can't randomly place.
      /*else
-     {
-       let sizeNum = Number(size);
-       i = Math.floor(Math.random()*8);
-       j = Math.floor(Math.random()*8);
-       let tempCoords = (i+1) + ":" + (j+1);
-       if((i+sizeNum<9) || (j+sizeNum < 9) || (i>1) || (j>1))//is valid
-       {
-         buttonHandlerSetup(shipId, tempCoords, size, horizontal);
-       }
-     }*/
-   //}
+    {
+      let sizeNum = Number(size);
+      let coord = exec.admir2.AIplace("ship2",exec.admir2.botDifficulty);
+      buttonHandlerSetup(shipId, coord, size, horizontal);
+      if(sizeNum !== 1)
+      {
+        let horizontal = Math.floor(Math.random() * 2)+1;
+        if (horizontal === 1)
+        {
+          //call the placeship function for the next smallest ship
+          placeShip(sizeNum-1, true, shipId);
+        }
+        else
+        {
+          //call the placeship function for the next smallest ship
+          placeShip(sizeNum -1, false, shipId);
+        }
+      }
+      document.getElementById("test").style.display = "none";
+      document.getElementById("ships").style.display = "none";
+      document.getElementById("names").style.display = "none";
+      document.getElementById("placement").style.display = "none";
+      alert("Press ok to start the game");
+      exec.advancePlayerTurn();
+      storeExecObj(tempObj);
+    }
+  }*/
  }
 
 /**
@@ -488,7 +557,7 @@ function buttonHandler(tableId, coords){
                   if (exec.admir1.fleet[i].coords[j] === coords && exec.admir1.afloat != 0) {
                     if(exec.getPlayerTurn() == 2 && exec.admir2.botDifficulty != "0")
                     {
-                      alert("Bot sunk your ship!");
+                      //alert("Bot sunk your ship!");
                     }
                     else
                     {

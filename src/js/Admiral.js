@@ -21,11 +21,18 @@ class Admiral {
     this.afloat = num;
     this.name = pName;
     this.alreadyGuessed = new Array(8);
+    this.alreadyPlaced = new Array(8);
     this.botDifficulty = isBot;
     for(let i = 0; i <= this.config.BOARD_SIZE; i++){//Make this configurable, should be variable "size" found in Config.js
         this.alreadyGuessed[i] = new Array(8);
         for(let j = 0; j <= this.config.BOARD_SIZE; j++){
             this.alreadyGuessed[i][j] = 0;
+        }
+    }
+    for(let i = 0; i <= this.config.BOARD_SIZE; i++){//Make this configurable, should be variable "size" found in Config.js
+        this.alreadyPlaced[i] = new Array(8);
+        for(let j = 0; j <= this.config.BOARD_SIZE; j++){
+            this.alreadyPlaced[i][j] = 0;
         }
     }
     for (let x = 1; x <= num; x++) {
@@ -254,4 +261,41 @@ class Admiral {
      let guess = i.toString(10) + ":" + j.toString(10);
      return guess;
    }
+
+AIplace(tableID, isBot){
+  let coord = "";
+  if(isBot > 0 || isBot < 4)
+  {
+    coord = this.botPlace();
+  }
+  return coord;
+}
+
+botPlace() {
+  let i = Math.floor((Math.random() * 8)+1);
+  let j = Math.floor((Math.random() * 8)+1);
+  let samespot = true;
+
+  if(this.alreadyPlaced[i][j] != 1) {
+       this.alreadyPlaced[i][j] = 1;
+    }
+  else{
+    while(samespot)
+    {
+      i  = Math.floor((Math.random() * 8)+1);
+      j = Math.floor((Math.random() * 8)+1);
+      if(this.alreadyPlaced[i][j] == 1)
+      {
+        samespot = true;
+      }
+      else {
+        samespot = false;
+        this.alreadyPlaced[i][j] = 1;
+      }
+    }
+  }
+
+  let guess = i.toString(10) + ":" + j.toString(10);
+  return guess;
+}
 }
