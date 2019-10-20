@@ -316,7 +316,7 @@ function setPlayerNames() {
          {
            let coord = exec.admir2.AIplace(shipId,exec.admir2.botDifficulty);
            let sizeNum = Number(size);
-           buttonHandlerSetup(shipId, "4:4", size, horizontal);
+           buttonHandlerSetup(shipId, coord, size, horizontal);
            if (horizontal)
            {
              if (j + sizeNum <= 8) {
