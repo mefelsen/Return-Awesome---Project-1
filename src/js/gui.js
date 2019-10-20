@@ -314,10 +314,9 @@ function setPlayerNames() {
          }
          else
          {
-           document.getElementById(shipId).style.display = "none";
            let coord = exec.admir2.AIplace(shipId,exec.admir2.botDifficulty);
            let sizeNum = Number(size);
-           buttonHandlerSetup(shipId, coord, size, horizontal);
+           buttonHandlerSetup(shipId, "4:4", size, horizontal);
            if (horizontal)
            {
              if (j + sizeNum <= 8) {
@@ -608,10 +607,14 @@ function buttonHandlerSetup(tableId, coords, shipSize, orientation){
 function saveShip(coords, shipSize, orientation) {
   if(exec.m_playerTurn == 1) {
     tempObj.adm1Coords[shipSize - 1] = coords;
+    var car = shipSize - 1;
+    var pop = tempObj.adm1Coords[shipSize - 1];
     tempObj.adm1Ori[shipSize - 1] = orientation;
   }
   else if(exec.m_playerTurn == 2) {
     tempObj.adm2Coords[shipSize - 1] = coords;
+    var dar = shipSize - 1;
+    var cop = tempObj.adm2Coords[shipSize - 1];
     tempObj.adm2Ori[shipSize - 1] = orientation;
   }
   else {
@@ -627,6 +630,10 @@ function saveShip(coords, shipSize, orientation) {
  * {@link Exec} object with all members initialized.
  */
 function storeExecObj(tempObj){
+  let doo = tempObj.adm1Coords[0];
+  let dohast = tempObj.adm1Ori[0];
+  let duhast = tempObj.adm2Coords[0];
+  let mich = tempObj.adm2Ori[0];
     sessionStorage.temp = JSON.stringify(tempObj);
     location.href = "./index.html";
 }
@@ -649,6 +656,10 @@ function pullExecObj(){
 function onLoadPull(){
 
     placeholder = pullExecObj();
+    let doo = placeholder.adm1Coords[0];
+    let dohast = placeholder.adm1Ori[0];
+    let duhast = placeholder.adm2Coords[0];
+    let mich = placeholder.adm2Ori[0];
     reconstruct(placeholder);
     exec.refreshMap();
 }
