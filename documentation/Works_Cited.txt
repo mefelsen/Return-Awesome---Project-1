@@ -4,3 +4,19 @@ We did not use any other libraries or frameworks in our project.
 
 Although we did not directly copy code from anywhere to complete our project, we owe https://www.w3schools.com/ and https://developer.mozilla.org/
 a lot for helping us with javascript, css, and html. Essentially when in doubt, we went there. :)
+
+
+https://kenney.nl/assets/voiceover-pack-fighter
+  -1.ogg
+  -2.ogg
+  -3.ogg
+  -4.ogg
+  -5.ogg
+  
+https://kenney.nl/assets/digital-audio
+  -shot_hit.ogg
+  -shot_miss.ogg
+  -game_over.ogg
+  -you_win.ogg
+  -winner.ogg
+  -combo_breaker.ogg
