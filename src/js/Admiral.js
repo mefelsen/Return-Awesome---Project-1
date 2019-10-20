@@ -22,9 +22,10 @@ class Admiral {
     this.name = pName;
     this.alreadyGuessed = new Array(8);
     this.botDifficulty = isBot;
-    for(let i = 0; i < this.config.BOARD_SIZE; i++){//Make this configurable, should be variable "size" found in Config.js
+    this.aIcoord=""
+    for(let i = 0; i <= this.config.BOARD_SIZE; i++){//Make this configurable, should be variable "size" found in Config.js
         this.alreadyGuessed[i] = new Array(8);
-        for(let j = 0; j < this.config.BOARD_SIZE; j++){
+        for(let j = 0; j <= this.config.BOARD_SIZE; j++){
             this.alreadyGuessed[i][j] = 0;
         }
     }
@@ -33,7 +34,17 @@ class Admiral {
       this.fleet.push(newShip); //adds the new ship to fleet array
     }
   }
-
+  savecoord(coord)
+  {
+    this.aIcoord=coord
+  }
+  gethitstute(){
+    return this.board.isHit;
+  }
+  updatehitstute()
+  {
+    this.board.isHit=false;
+  }
   /**
    * Get the number of ships.
    * @return {number} the number of ships that the Admiral has.
@@ -228,22 +239,46 @@ class Admiral {
     * @return {string} guess : the randomly choosen coordinate to be returned to AIupdateHit and passed to updateCell()
     */
    easyAttack() {
-     let i = Math.floor(Math.random() * 8) + 1;
-     let j = Math.floor(Math.random() * 8) + 1;
+     let i = Math.floor((Math.random() * 8)+1);
+     let j = Math.floor((Math.random() * 8)+1);
+     let samespot = true;
 
      if(this.alreadyGuessed[i][j] != 1) {
           this.alreadyGuessed[i][j] = 1;
        }
-
-     while(this.alreadyGuessed[i][j] != 1) {
-       i  = Math.floor(Math.random() * 8) + 1;
-       j = Math.floor(Math.random() * 8) + 1;
-
-       if(this.alreadyGuessed[i][j] != 1) {
-          this.alreadyGuessed[i][j] = 1;
+     else{
+       while(samespot)
+       {
+         i  = Math.floor((Math.random() * 8)+1);
+         j = Math.floor((Math.random() * 8)+1);
+         if(this.alreadyGuessed[i][j] == 1)
+         {
+           samespot = true;
+         }
+         else {
+           samespot = false;
+           this.alreadyGuessed[i][j] = 1;
+         }
        }
      }
+
      let guess = i.toString(10) + ":" + j.toString(10);
      return guess;
    }
+     /**
+    * Used to find player 1's coordinates for the hard bot to attack
+    * @return {string} coord : the found coordinate to be returned to AIupdateHit and passed to updateCell()
+    */
+   returnVal(){
+    let coord;
+   for(var i=1; i <9; i++)
+   {
+     for(var j=1; j <9; j++) 
+     {
+       coord = i.toString(10)+":"+j.toString(10);
+       if(this.board.arr[i-1][j-1] == this.board.conf.oceanTypes.SHIP)
+       return coord; 
+     }
+   }
+ }
 }

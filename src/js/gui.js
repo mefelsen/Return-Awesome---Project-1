@@ -6,6 +6,11 @@ let placeholder;
 let p1;
 let p2;
 
+let p1_specialshot_enable = true;
+let p2_specialshot_enable = true;
+let p1_sunk_ship = false;
+let p2_sunk_ship = false;
+
 /**
  * [Member of gui.js]
  * Hides instructions after users start setup.
@@ -90,11 +95,15 @@ function setPlayerNames() {
    if (direction === 1)
    {
      //if it is horizontal
+     let audio = new Audio('src/Sounds/' + numShips + '.ogg');
+     audio.play();
      placeShip(numShips, true, shipId);
    }
    else
    {
      //if it is vertical
+     let audio = new Audio('src/Sounds/' + numShips + '.ogg');
+     audio.play();
      placeShip(numShips, false, shipId);
    }
  }
@@ -127,7 +136,7 @@ function setPlayerNames() {
    {
      if(document.getElementById("AI_selector").value == "bot")
      {
-       document.getElementById("placement").innerHTML = "Press button to randomly place bot ships.";
+       document.getElementById("placement").innerHTML = "Bot placement is happening right now.";
      }
      else
      {
@@ -241,6 +250,9 @@ function setPlayerNames() {
              if (sizeNum !== 1)
              {
                //while still placing ships, ask for a new orientation after each one is placed
+               let audio = new Audio('src/Sounds/' + (size - 1) + '.ogg');
+               audio.play();
+
                let horizontal;
                if((shipId === "ship1") || (shipId != "ship1" && document.getElementById("AI_selector").value != "bot"))
                {
@@ -465,6 +477,8 @@ function buttonHandler(tableId, coords){
                 for (let j = 0; j<exec.admir2.fleet[i].coords.length; j++)
                 {
                   if (exec.admir2.fleet[i].coords[j] == coords && exec.admir2.afloat != 0) {
+
+                    document.getElementById('shipSunk').play();
                     alert("Congrats! You sunk a ship!");
                   }
                 }
@@ -483,7 +497,7 @@ function buttonHandler(tableId, coords){
                   if (exec.admir1.fleet[i].coords[j] === coords && exec.admir1.afloat != 0) {
                     if(exec.getPlayerTurn() == 2 && exec.admir2.botDifficulty != "0")
                     {
-                      alert("Bot sunk your ship!");
+                      //disable alart
                     }
                     else
                     {
@@ -499,6 +513,14 @@ function buttonHandler(tableId, coords){
     else{
         alert("You shouldn't fire on your own map!");
     }
+    document.getElementById("specialshot").style = "display: inline; visibility: hidden;";
+    document.getElementById("specialshot").disabled = "true";
+    document.getElementById("specialshot_button").style = "display: inline; visibility: hidden;";
+    document.getElementById("specialshot_button").disabled = "true";
+    document.getElementById("specialshot_form1").style = "display: inline; visibility: hidden;";
+    document.getElementById("specialshot_form1").disabled = "true";
+    document.getElementById("specialshot_form2").style = "display: inline; visibility: hidden;";
+    document.getElementById("specialshot_form2").disabled = "true";
 }
 
 /**
@@ -650,6 +672,15 @@ function turnButton(){
         document.getElementById("p2updates").style.display = "none";
         document.getElementById("p1progress").style.display = "none";
         document.getElementById("p2progress").style.display = "none";
+        //hide special shot elements
+        document.getElementById("specialshot").style = "display: inline; visibility: hidden;";
+        document.getElementById("specialshot").disabled = "true";
+        document.getElementById("specialshot_button").style = "display: inline; visibility: hidden;";
+        document.getElementById("specialshot_button").disabled = "true";
+        document.getElementById("specialshot_form1").style = "display: inline; visibility: hidden;";
+        document.getElementById("specialshot_form1").disabled = "true";
+        document.getElementById("specialshot_form2").style = "display: inline; visibility: hidden;";
+        document.getElementById("specialshot_form2").disabled = "true";
         //update home button text to next value
         if(exec.admir2.botDifficulty == "0")
         {
@@ -660,15 +691,82 @@ function turnButton(){
           temp.value = "Bot Start";
         }
         exec.advancePlayerTurn();
+        //exec.advancePlayerTurn(); <-- for future use
         exec.refreshMap();
         exec.refreshFireMap();
     }
     else if(temp.value == "Bot Start")
     {//Test
-      let coord = exec.admir2.AIupdateHit("fire1",exec.admir2.botDifficulty);
-      buttonHandler("fire1",coord);
-      if(document.getElementById("message").innerHTML != "has won the game!!!")
-      {
+      if (exec.admir2.botDifficulty == "1") {
+        let coord = exec.admir2.AIupdateHit("fire1", exec.admir2.botDifficulty);
+        buttonHandler("fire1", coord);
+
+        // if (document.getElementById("message").innerHTML != "has won the game!!!") {
+        //   exec.advancePlayerTurn();
+        // }
+        // exec.refreshMap();
+        // exec.refreshFireMap();
+        // temp.value = "Player Start";
+      }
+      else if (exec.admir2.botDifficulty == "2") {
+        //part planB
+        // let i = Math.floor(Math.random() * 8) + 1;
+        // let j = Math.floor(Math.random() * 8) + 1;
+        // let guess = i.toString(10) + ":" + j.toString(10);
+        let i
+        let j
+        var guess
+        let flag=true
+        // let looped=exec.admir1.afloat
+        // let ed=looped-1
+
+        while(!exec.admir1.gethitstute())
+        {
+          var looped=exec.admir1.afloat
+          var ed=looped-1
+          i = Math.floor(Math.random() * 8) + 1;
+          j = Math.floor(Math.random() * 8) + 1;
+          guess = i.toString(10) + ":" + j.toString(10);
+          buttonHandler("fire1", guess);
+          flag=false
+        }
+
+        if(looped!=ed && flag)
+        {
+          exec.admir1.savecoord(guess)
+          rechit(exec.admir1.aIcoord)
+        }else
+        {
+          //update
+          exec.admir1.updatehitstute()
+        }
+        flag=true
+
+        //planB
+        // while(looped!=ed)
+        // {
+        //   i = Math.floor(Math.random() * 8) + 1;
+        //   j = Math.floor(Math.random() * 8) + 1;
+        //   guess = i.toString(10) + ":" + j.toString(10);
+        //   buttonHandler("fire1", guess);
+        //   looped=exec.admir1.afloat
+        // }
+
+
+
+        // if(document.getElementById("message").innerHTML != "has won the game!!!")
+        // {
+        //   exec.advancePlayerTurn();
+        // }
+        // exec.refreshMap();
+        // exec.refreshFireMap();
+        // temp.value = "Player Start";
+      }
+      else if (exec.admir2.botDifficulty == "3") {
+      let coord = exec.admir1.returnVal();
+      buttonHandler("fire1", coord);
+      }
+      if (document.getElementById("message").innerHTML != "has won the game!!!") {
         exec.advancePlayerTurn();
       }
       exec.refreshMap();
@@ -689,9 +787,109 @@ function turnButton(){
         temp.value = "End Turn";
         //disable button
         temp.disabled = true;
+
+        if(p1_specialshot_enable && exec.getPlayerTurn() == 1) {
+          document.getElementById("specialshot").style = "display: inline;";
+          document.getElementById("specialshot").disabled = false;
+          document.getElementById("specialshot_button").style = "display: inline;";
+          document.getElementById("specialshot_button").disabled = false;
+          document.getElementById("specialshot_form1").style = "display: inline;";
+          document.getElementById("specialshot_form1").disabled = false;
+          document.getElementById("specialshot_form2").style = "display: inline;";
+          document.getElementById("specialshot_form2").disabled = false;
+        }
+        if(p2_specialshot_enable && exec.getPlayerTurn() == 2) {
+          document.getElementById("specialshot").style = "display: inline;";
+          document.getElementById("specialshot").disabled = false;
+          document.getElementById("specialshot_button").style = "display: inline;";
+          document.getElementById("specialshot_button").disabled = false;
+          document.getElementById("specialshot_form1").style = "display: inline;";
+          document.getElementById("specialshot_form1").disabled = false;
+          document.getElementById("specialshot_form2").style = "display: inline;";
+          document.getElementById("specialshot_form2").disabled = false;
+        }
+        if(!p1_specialshot_enable && exec.getPlayerTurn() == 1) {
+          document.getElementById("specialshot").style = "display: inline; visibility: hidden;";
+          document.getElementById("specialshot").disabled = "true";
+          document.getElementById("specialshot_button").style = "display: inline; visibility: hidden;";
+          document.getElementById("specialshot_button").disabled = "true";
+          document.getElementById("specialshot_form1").style = "display: inline; visibility: hidden;";
+          document.getElementById("specialshot_form1").disabled = "true";
+          document.getElementById("specialshot_form2").style = "display: inline; visibility: hidden;";
+          document.getElementById("specialshot_form2").disabled = "true";
+        }
+        if(!p2_specialshot_enable && exec.getPlayerTurn() == 2) {
+          document.getElementById("specialshot").style = "display: inline; visibility: hidden;";
+          document.getElementById("specialshot").disabled = "true";
+          document.getElementById("specialshot_button").style = "display: inline; visibility: hidden;";
+          document.getElementById("specialshot_button").disabled = "true";
+          document.getElementById("specialshot_form1").style = "display: inline; visibility: hidden;";
+          document.getElementById("specialshot_form1").disabled = "true";
+          document.getElementById("specialshot_form2").style = "display: inline; visibility: hidden;";
+          document.getElementById("specialshot_form2").disabled = "true";
+        }
     }
 }
+function check(x)
+{
+  if(x>0&&x<9)
+  {
+    return true
+  }
+  else
+  {
+    return false
+  }
+}
+function rechit(coord)
+{
+  let row=parseInt(coord.substr(0,1))
+  let col=parseInt(coord.substr(2,1))
+  //going up
+  if(check(row-1))
+  {
+    let tothecoord= (row-1).toString(10)+":"+col.toString(10)
+    //exec.admir1.updatehitstute()
+    buttonHandler("fire1", tothecoord);
+    if(exec.admir1.gethitstute())
+    {
+      exec.admir1.savecoord(tothecoord)
+    }
+  }
+  if(check(row+1))
+  {
+    let tothecoord= (row+1).toString(10)+":"+col.toString(10)
+    //exec.admir1.updatehitstute()
+    buttonHandler("fire1", tothecoord);
+    if(exec.admir1.gethitstute())
+    {
+      exec.admir1.savecoord(tothecoord)
+    }
 
+  }
+  if(check(col-1))
+  {
+    let tothecoord= row.toString(10)+":"+(col-1).toString(10)
+    //exec.admir1.updatehitstute()
+    buttonHandler("fire1", tothecoord);
+    if(exec.admir1.gethitstute())
+    {
+      exec.admir1.savecoord(tothecoord)
+    }
+
+  }
+  if(check(col+1))
+  {
+    let tothecoord= row.toString(10)+":"+(col+1).toString(10)
+    //exec.admir1.updatehitstute()
+    buttonHandler("fire1", tothecoord);
+    if(exec.admir1.gethitstute())
+    {
+      exec.admir1.savecoord(tothecoord)
+    }
+
+  }
+}
 /**
  * [Member of gui.js]
  * Changes GUI labels and select forms based on playing against another player or AI
@@ -730,14 +928,99 @@ function specialShot()
     alert("Select a valid location! Your special shot will go out of bounds");
   }
   else {
-    buttonHandler("fire1",i.toString() + ":" + j.toString());//middle
-    buttonHandler("fire1",i.toString() + ":" + (j-1).toString());//middle bottom
-    buttonHandler("fire1",i.toString() + ":" + (j+1).toString());//middle top
-    buttonHandler("fire1",(i-1).toString() + ":" + j.toString());//Left middle
-    buttonHandler("fire1",(i+1).toString() + ":" + j.toString());//Right middle
-    buttonHandler("fire1",(i-1).toString() + ":" + (j+1).toString());//Left top
-    buttonHandler("fire1",(i+1).toString() + ":" + (j+1).toString());//Right top
-    buttonHandler("fire1",(i-1).toString() + ":" + (j-1).toString());//Left bottom
-    buttonHandler("fire1",(i+1).toString() + ":" + (j-1).toString());//Right bottom
+    specialbuttonHandler("fire1",i.toString() + ":" + j.toString());//middle
+    specialbuttonHandler("fire1",i.toString() + ":" + (j-1).toString());//middle bottom
+    specialbuttonHandler("fire1",i.toString() + ":" + (j+1).toString());//middle top
+    specialbuttonHandler("fire1",(i-1).toString() + ":" + j.toString());//Left middle
+    specialbuttonHandler("fire1",(i+1).toString() + ":" + j.toString());//Right middle
+    specialbuttonHandler("fire1",(i-1).toString() + ":" + (j+1).toString());//Left top
+    specialbuttonHandler("fire1",(i+1).toString() + ":" + (j+1).toString());//Right top
+    specialbuttonHandler("fire1",(i-1).toString() + ":" + (j-1).toString());//Left bottom
+    specialbuttonHandler("fire1",(i+1).toString() + ":" + (j-1).toString());//Right bottom
+
+    //Disable all controls after shot is used
+    document.getElementById("specialshot").style = "display: inline; visibility: hidden;";
+    document.getElementById("specialshot").disabled = "true";
+    document.getElementById("specialshot_button").style = "display: inline; visibility: hidden;";
+    document.getElementById("specialshot_button").disabled = "true";
+    document.getElementById("specialshot_form1").style = "display: inline; visibility: hidden;";
+    document.getElementById("specialshot_form1").disabled = "true";
+    document.getElementById("specialshot_form2").style = "display: inline; visibility: hidden;";
+    document.getElementById("specialshot_form2").disabled = "true";
+
+    if(exec.getPlayerTurn() == 1) {
+      p1_specialshot_enable = false;
+      if(p1_sunk_ship) {
+        alert("Congrats! You sunk a ship");
+      }
+      exec.endGameChecker(1);
+    }
+    else {
+      p2_specialshot_enable = false;
+      if(p2_sunk_ship) {
+        alert("Congrats! You sunk a ship");
+      }
+      exec.endGameChecker(2);
+    }
   }
+}
+
+/**
+ * [Member of gui.js]
+ * A altered version of buttonhandler. Specifically for special shot.
+ * Returns a bool is a ship was sunk or not after a special shot attack.
+ * {@link Exec#updateTable} to update the firing map, and enables the "next turn" button.
+ * @param {string} tableId - id of the table that triggered the onclick event.
+ * @param {string} coords - coordinates for a specific cell in the table.
+ */
+function specialbuttonHandler(tableId, coords){
+    if(tableId == "fire1"){
+        let hit = exec.specialupdateTable(coords, tableId);
+        document.getElementById("table1").classList.add("disabledButton");
+        document.getElementById("turnButton").disabled = false;
+        //exec.checkSunk();
+        if(exec.getPlayerTurn()===1)
+        {
+          document.getElementById("p1progress").style.display = "block";
+          for (let i = 0; i< exec.admir2.numShips; i++)
+          {
+            if (exec.admir2.fleet[i].status === false)
+            {
+                for (let j = 0; j<exec.admir2.fleet[i].coords.length; j++)
+                {
+                  if (exec.admir2.fleet[i].coords[j] == coords && exec.admir2.afloat != 0) {
+                    p1_sunk_ship = true;
+                  }
+                }
+            }
+          }
+        }
+        else
+        {
+          document.getElementById("p2progress").style.display = "block";
+          for (let i = 0; i< exec.admir1.numShips; i++)
+          {
+            if (exec.admir1.fleet[i].status === false)
+            {
+                for (let j = 0; j<exec.admir1.fleet[i].coords.length; j++)
+                {
+                  if (exec.admir1.fleet[i].coords[j] === coords && exec.admir1.afloat != 0) {
+                    if(exec.getPlayerTurn() == 2 && exec.admir2.botDifficulty != "0")
+                    {
+                      //alert("Bot sunk your ship!");
+                    }
+                    else
+                    {
+                      p2_sunk_ship = true;
+                    }
+                  }
+                }
+            }
+          }
+
+        }
+    }
+    else{
+        alert("You shouldn't fire on your own map!");
+    }
 }
