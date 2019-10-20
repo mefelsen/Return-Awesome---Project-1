@@ -265,4 +265,20 @@ class Admiral {
      let guess = i.toString(10) + ":" + j.toString(10);
      return guess;
    }
+     /**
+    * Used to find player 1's coordinates for the hard bot to attack
+    * @return {string} coord : the found coordinate to be returned to AIupdateHit and passed to updateCell()
+    */
+   returnVal(){
+    let coord;
+   for(var i=1; i <9; i++)
+   {
+     for(var j=1; j <9; j++) 
+     {
+       coord = i.toString(10)+":"+j.toString(10);
+       if(this.board.arr[i-1][j-1] == this.board.conf.oceanTypes.SHIP)
+       return coord; 
+     }
+   }
+ }
 }

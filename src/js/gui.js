@@ -701,12 +701,12 @@ function turnButton(){
         let coord = exec.admir2.AIupdateHit("fire1", exec.admir2.botDifficulty);
         buttonHandler("fire1", coord);
 
-        if (document.getElementById("message").innerHTML != "has won the game!!!") {
-          exec.advancePlayerTurn();
-        }
-        exec.refreshMap();
-        exec.refreshFireMap();
-        temp.value = "Player Start";
+        // if (document.getElementById("message").innerHTML != "has won the game!!!") {
+        //   exec.advancePlayerTurn();
+        // }
+        // exec.refreshMap();
+        // exec.refreshFireMap();
+        // temp.value = "Player Start";
       }
       else if (exec.admir2.botDifficulty == "2") {
         //part planB
@@ -754,14 +754,24 @@ function turnButton(){
 
 
 
-        if(document.getElementById("message").innerHTML != "has won the game!!!")
-        {
-          exec.advancePlayerTurn();
-        }
-        exec.refreshMap();
-        exec.refreshFireMap();
-        temp.value = "Player Start";
+        // if(document.getElementById("message").innerHTML != "has won the game!!!")
+        // {
+        //   exec.advancePlayerTurn();
+        // }
+        // exec.refreshMap();
+        // exec.refreshFireMap();
+        // temp.value = "Player Start";
       }
+      else if (exec.admir2.botDifficulty == "3") {
+      let coord = exec.admir1.returnVal();
+      buttonHandler("fire1", coord);
+      }
+      if (document.getElementById("message").innerHTML != "has won the game!!!") {
+        exec.advancePlayerTurn();
+      }
+      exec.refreshMap();
+      exec.refreshFireMap();
+      temp.value = "Player Start";
     }
     else{
 
