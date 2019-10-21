@@ -662,109 +662,75 @@ function updateMessages()
  * button text and refreshes player maps.
  */
 function turnButton(){
-    let temp = document.getElementById("turnButton");
-    if(temp.value === "End Turn"){
-        //hide table divs
-        document.getElementById("gameInstructions").style.display = "none";
-        document.getElementById("table1").style.display = "none";
-        document.getElementById("table2").style.display = "none";
-        document.getElementById("p1updates").style.display = "none";
-        document.getElementById("p2updates").style.display = "none";
-        document.getElementById("p1progress").style.display = "none";
-        document.getElementById("p2progress").style.display = "none";
-        //hide special shot elements
-        document.getElementById("specialshot").style = "display: inline; visibility: hidden;";
-        document.getElementById("specialshot").disabled = "true";
-        document.getElementById("specialshot_button").style = "display: inline; visibility: hidden;";
-        document.getElementById("specialshot_button").disabled = "true";
-        document.getElementById("specialshot_form1").style = "display: inline; visibility: hidden;";
-        document.getElementById("specialshot_form1").disabled = "true";
-        document.getElementById("specialshot_form2").style = "display: inline; visibility: hidden;";
-        document.getElementById("specialshot_form2").disabled = "true";
-        //update home button text to next value
-        if(exec.admir2.botDifficulty == "0")
-        {
-          temp.value = "Player Start";
-        }
-        else
-        {
-          temp.value = "Bot Start";
-        }
-        exec.advancePlayerTurn();
-        //exec.advancePlayerTurn(); <-- for future use
-        exec.refreshMap();
-        exec.refreshFireMap();
+  let temp = document.getElementById("turnButton");
+  if (temp.value === "End Turn") {
+    //hide table divs
+    document.getElementById("gameInstructions").style.display = "none";
+    document.getElementById("table1").style.display = "none";
+    document.getElementById("table2").style.display = "none";
+    document.getElementById("p1updates").style.display = "none";
+    document.getElementById("p2updates").style.display = "none";
+    document.getElementById("p1progress").style.display = "none";
+    document.getElementById("p2progress").style.display = "none";
+    //hide special shot elements
+    document.getElementById("specialshot").style = "display: inline; visibility: hidden;";
+    document.getElementById("specialshot").disabled = "true";
+    document.getElementById("specialshot_button").style = "display: inline; visibility: hidden;";
+    document.getElementById("specialshot_button").disabled = "true";
+    document.getElementById("specialshot_form1").style = "display: inline; visibility: hidden;";
+    document.getElementById("specialshot_form1").disabled = "true";
+    document.getElementById("specialshot_form2").style = "display: inline; visibility: hidden;";
+    document.getElementById("specialshot_form2").disabled = "true";
+    //update home button text to next value
+    if (exec.admir2.botDifficulty == "0") {
+      temp.value = "Player Start";
     }
-    else if(temp.value == "Bot Start")
-    {//Test
-      if (exec.admir2.botDifficulty == "1") {
-        let coord = exec.admir2.AIupdateHit("fire1", exec.admir2.botDifficulty);
-        buttonHandler("fire1", coord);
-
-        // if (document.getElementById("message").innerHTML != "has won the game!!!") {
-        //   exec.advancePlayerTurn();
-        // }
-        // exec.refreshMap();
-        // exec.refreshFireMap();
-        // temp.value = "Player Start";
-      }
-      else if (exec.admir2.botDifficulty == "2") {
-        //part planB
-        // let i = Math.floor(Math.random() * 8) + 1;
-        // let j = Math.floor(Math.random() * 8) + 1;
-        // let guess = i.toString(10) + ":" + j.toString(10);
-        let i
-        let j
-        var guess
-        let flag=true
-        // let looped=exec.admir1.afloat
-        // let ed=looped-1
-
-        while(!exec.admir1.gethitstute())
-        {
-          var looped=exec.admir1.afloat
-          var ed=looped-1
-          i = Math.floor(Math.random() * 8) + 1;
-          j = Math.floor(Math.random() * 8) + 1;
-          guess = i.toString(10) + ":" + j.toString(10);
-          buttonHandler("fire1", guess);
-          flag=false
-        }
-
-        if(looped!=ed && flag)
-        {
-          exec.admir1.savecoord(guess)
-          rechit(exec.admir1.aIcoord)
-        }else
-        {
-          //update
-          exec.admir1.updatehitstute()
-        }
-        flag=true
-
-        //planB
-        // while(looped!=ed)
-        // {
-        //   i = Math.floor(Math.random() * 8) + 1;
-        //   j = Math.floor(Math.random() * 8) + 1;
-        //   guess = i.toString(10) + ":" + j.toString(10);
-        //   buttonHandler("fire1", guess);
-        //   looped=exec.admir1.afloat
-        // }
-
-
-
-        // if(document.getElementById("message").innerHTML != "has won the game!!!")
-        // {
-        //   exec.advancePlayerTurn();
-        // }
-        // exec.refreshMap();
-        // exec.refreshFireMap();
-        // temp.value = "Player Start";
-      }
-      else if (exec.admir2.botDifficulty == "3") {
-      let coord = exec.admir1.returnVal();
+    else {
+      temp.value = "Bot Start";
+    }
+    exec.advancePlayerTurn();
+    //exec.advancePlayerTurn(); <-- for future use
+    exec.refreshMap();
+    exec.refreshFireMap();
+  }
+  else if (temp.value == "Bot Start") {//Test
+    if (exec.admir2.botDifficulty == "1") {
+      let coord = exec.admir2.AIupdateHit("fire1", exec.admir2.botDifficulty);
       buttonHandler("fire1", coord);
+
+      if (document.getElementById("message").innerHTML != "has won the game!!!") {
+        exec.advancePlayerTurn();
+      }
+      exec.refreshMap();
+      exec.refreshFireMap();
+      temp.value = "Player Start";
+    }
+    else if (exec.admir2.botDifficulty == "2") {
+      var guess
+      var coord
+      var shipdowncount = exec.admir2.guessedarr.length;
+      var shipcount;
+      if (exec.admir2.guessmode) {
+        guess = exec.admir2.AIupdateHit("fire1", exec.admir2.botDifficulty)
+        coord = exec.admir1.findShipByCoord(guess)
+        buttonHandler("fire1", guess)
+        if (coord != undefined) {
+          shipcount = exec.admir1.fleet[coord].length
+          exec.admir2.guessmode = false
+          exec.admir2.guessedarr.push(guess)
+          exec.admir2.savecoord(guess)
+          console.log("guess mode off!!")
+        }
+      }
+      else if (!exec.admir2.guessmode) {
+        if (shipcount != shipdowncount) {
+          console.log(exec.admir2.aIcoord + "for start of one ship mode")
+          oneShipmode()
+        }
+        else {
+
+          exec.admir2.guessmode = true
+        }
       }
       if (document.getElementById("message").innerHTML != "has won the game!!!") {
         exec.advancePlayerTurn();
@@ -773,62 +739,87 @@ function turnButton(){
       exec.refreshFireMap();
       temp.value = "Player Start";
     }
-    else{
+    else if(exec.admir2.botDifficulty == "3")
+    {
+      // let coord = exec.admir2.returnVal();
+      // buttonHandler("fire1", coord);
+     let looped=exec.admir1.afloat
+      var ed=looped-1
+      let i
+      let j
+      while(looped!=ed)
+        {
+          i = Math.floor(Math.random() * 8) + 1;
+          j = Math.floor(Math.random() * 8) + 1;
+          guess = i.toString(10) + ":" + j.toString(10);
+          buttonHandler("fire1", guess);
+          looped=exec.admir1.afloat
+        }
 
-        //show tables
-        updateMessages();
-        document.getElementById("gameInstructions").style.display = "block";
-        document.getElementById("table1").style.display = "block";
-        document.getElementById("table2").style.display = "block";
-        //unlock the table
-
-        document.getElementById("table1").classList.remove("disabledButton");
-        //update button text
-        temp.value = "End Turn";
-        //disable button
-        temp.disabled = true;
-
-        if(p1_specialshot_enable && exec.getPlayerTurn() == 1) {
-          document.getElementById("specialshot").style = "display: inline;";
-          document.getElementById("specialshot").disabled = false;
-          document.getElementById("specialshot_button").style = "display: inline;";
-          document.getElementById("specialshot_button").disabled = false;
-          document.getElementById("specialshot_form1").style = "display: inline;";
-          document.getElementById("specialshot_form1").disabled = false;
-          document.getElementById("specialshot_form2").style = "display: inline;";
-          document.getElementById("specialshot_form2").disabled = false;
-        }
-        if(p2_specialshot_enable && exec.getPlayerTurn() == 2) {
-          document.getElementById("specialshot").style = "display: inline;";
-          document.getElementById("specialshot").disabled = false;
-          document.getElementById("specialshot_button").style = "display: inline;";
-          document.getElementById("specialshot_button").disabled = false;
-          document.getElementById("specialshot_form1").style = "display: inline;";
-          document.getElementById("specialshot_form1").disabled = false;
-          document.getElementById("specialshot_form2").style = "display: inline;";
-          document.getElementById("specialshot_form2").disabled = false;
-        }
-        if(!p1_specialshot_enable && exec.getPlayerTurn() == 1) {
-          document.getElementById("specialshot").style = "display: inline; visibility: hidden;";
-          document.getElementById("specialshot").disabled = "true";
-          document.getElementById("specialshot_button").style = "display: inline; visibility: hidden;";
-          document.getElementById("specialshot_button").disabled = "true";
-          document.getElementById("specialshot_form1").style = "display: inline; visibility: hidden;";
-          document.getElementById("specialshot_form1").disabled = "true";
-          document.getElementById("specialshot_form2").style = "display: inline; visibility: hidden;";
-          document.getElementById("specialshot_form2").disabled = "true";
-        }
-        if(!p2_specialshot_enable && exec.getPlayerTurn() == 2) {
-          document.getElementById("specialshot").style = "display: inline; visibility: hidden;";
-          document.getElementById("specialshot").disabled = "true";
-          document.getElementById("specialshot_button").style = "display: inline; visibility: hidden;";
-          document.getElementById("specialshot_button").disabled = "true";
-          document.getElementById("specialshot_form1").style = "display: inline; visibility: hidden;";
-          document.getElementById("specialshot_form1").disabled = "true";
-          document.getElementById("specialshot_form2").style = "display: inline; visibility: hidden;";
-          document.getElementById("specialshot_form2").disabled = "true";
-        }
+      if (document.getElementById("message").innerHTML != "has won the game!!!") {
+        exec.advancePlayerTurn();
+      }
+      exec.refreshMap();
+      exec.refreshFireMap();
+      temp.value = "Player Start";
     }
+  }
+  else {
+
+    //show tables
+    updateMessages();
+    document.getElementById("gameInstructions").style.display = "block";
+    document.getElementById("table1").style.display = "block";
+    document.getElementById("table2").style.display = "block";
+    //unlock the table
+
+    document.getElementById("table1").classList.remove("disabledButton");
+    //update button text
+    temp.value = "End Turn";
+    //disable button
+    temp.disabled = true;
+
+    if (p1_specialshot_enable && exec.getPlayerTurn() == 1) {
+      document.getElementById("specialshot").style = "display: inline;";
+      document.getElementById("specialshot").disabled = false;
+      document.getElementById("specialshot_button").style = "display: inline;";
+      document.getElementById("specialshot_button").disabled = false;
+      document.getElementById("specialshot_form1").style = "display: inline;";
+      document.getElementById("specialshot_form1").disabled = false;
+      document.getElementById("specialshot_form2").style = "display: inline;";
+      document.getElementById("specialshot_form2").disabled = false;
+    }
+    if (p2_specialshot_enable && exec.getPlayerTurn() == 2) {
+      document.getElementById("specialshot").style = "display: inline;";
+      document.getElementById("specialshot").disabled = false;
+      document.getElementById("specialshot_button").style = "display: inline;";
+      document.getElementById("specialshot_button").disabled = false;
+      document.getElementById("specialshot_form1").style = "display: inline;";
+      document.getElementById("specialshot_form1").disabled = false;
+      document.getElementById("specialshot_form2").style = "display: inline;";
+      document.getElementById("specialshot_form2").disabled = false;
+    }
+    if (!p1_specialshot_enable && exec.getPlayerTurn() == 1) {
+      document.getElementById("specialshot").style = "display: inline; visibility: hidden;";
+      document.getElementById("specialshot").disabled = "true";
+      document.getElementById("specialshot_button").style = "display: inline; visibility: hidden;";
+      document.getElementById("specialshot_button").disabled = "true";
+      document.getElementById("specialshot_form1").style = "display: inline; visibility: hidden;";
+      document.getElementById("specialshot_form1").disabled = "true";
+      document.getElementById("specialshot_form2").style = "display: inline; visibility: hidden;";
+      document.getElementById("specialshot_form2").disabled = "true";
+    }
+    if (!p2_specialshot_enable && exec.getPlayerTurn() == 2) {
+      document.getElementById("specialshot").style = "display: inline; visibility: hidden;";
+      document.getElementById("specialshot").disabled = "true";
+      document.getElementById("specialshot_button").style = "display: inline; visibility: hidden;";
+      document.getElementById("specialshot_button").disabled = "true";
+      document.getElementById("specialshot_form1").style = "display: inline; visibility: hidden;";
+      document.getElementById("specialshot_form1").disabled = "true";
+      document.getElementById("specialshot_form2").style = "display: inline; visibility: hidden;";
+      document.getElementById("specialshot_form2").disabled = "true";
+    }
+  }
 }
 function check(x)
 {
