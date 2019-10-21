@@ -23,6 +23,9 @@ class Admiral {
     this.alreadyGuessed = new Array(8);
     this.botDifficulty = isBot;
     this.aIcoord=""
+    this.guessmode=true
+    this.guessedarr=[]
+  
     for(let i = 0; i <= this.config.BOARD_SIZE; i++){//Make this configurable, should be variable "size" found in Config.js
         this.alreadyGuessed[i] = new Array(8);
         for(let j = 0; j <= this.config.BOARD_SIZE; j++){
@@ -38,13 +41,8 @@ class Admiral {
   {
     this.aIcoord=coord
   }
-  gethitstute(){
-    return this.board.isHit;
-  }
-  updatehitstute()
-  {
-    this.board.isHit=false;
-  }
+  
+  
   /**
    * Get the number of ships.
    * @return {number} the number of ships that the Admiral has.
@@ -100,6 +98,7 @@ class Admiral {
     let tempIndex = this.findShipByCoord(coord);
     this.fleet[tempIndex].incNumHits();
     if(this.fleet[tempIndex].status == false) {
+      
       this.afloat--;
     }
   }
@@ -225,7 +224,7 @@ class Admiral {
        coord = this.easyAttack();
      }
      else if(isBot == "2") {
-       //Medium Attack Here
+      coord = this.easyAttack();
      }
     else if(isBot == "3") {
       //Hard Attack Here
@@ -238,6 +237,18 @@ class Admiral {
     * @prop {Array<Array<number>>} alreadyGuessed
     * @return {string} guess : the randomly choosen coordinate to be returned to AIupdateHit and passed to updateCell()
     */
+   returnVal(){
+    let coord;
+   for(var i=1; i <9; i++)
+   {
+     for(var j=1; j <9; j++) 
+     {
+       coord = i.toString(10)+":"+j.toString(10);
+       if(this.board.arr[i-1][j-1] == this.board.conf.oceanTypes.SHIP)
+       return coord; 
+     }
+   }
+ }
    easyAttack() {
      let i = Math.floor((Math.random() * 8)+1);
      let j = Math.floor((Math.random() * 8)+1);
